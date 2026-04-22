@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 
 
 
-@Document(collection = "users")
+@Document(collection = "clientrecords")
 public class ClientRecords {
 
     @Id
