@@ -21,7 +21,7 @@ public class ClientRecordsService {
         this.repository = repository;
     }
 
-    public List<ClientRecords> getAllFunds(){
+    public List<ClientRecords> getAllClientRecords(){
         return repository.findAll();
     }
 
