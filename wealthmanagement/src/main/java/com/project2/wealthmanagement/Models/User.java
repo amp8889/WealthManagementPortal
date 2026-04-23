@@ -6,7 +6,7 @@ import com.project2.wealthmanagement.Enums.UserRole;
 
 import jakarta.persistence.Id;
 
-// To be implemented further w/ Spring Security
+// TODO: To be implemented further w/ Spring Security
 @Document(collection = "user")
 public class User {
     @Id
