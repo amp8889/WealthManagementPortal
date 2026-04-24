@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.project2.wealthmanagement.Models.ClientRecords;
+import com.project2.wealthmanagement.Models.Goal;
 import com.project2.wealthmanagement.Repositories.ClientRecordsRepository;
+import com.project2.wealthmanagement.Repositories.GoalRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -15,10 +17,12 @@ public class ClientRecordsService {
 
 
     private final ClientRecordsRepository repository;
+    private final GoalRepository goalRepository;
 
 
-    public ClientRecordsService(ClientRecordsRepository repository){
+    public ClientRecordsService(ClientRecordsRepository repository, GoalRepository goalRepository){
         this.repository = repository;
+        this.goalRepository = goalRepository;
     }
 
     public List<ClientRecords> getAllClientRecords(){
@@ -32,7 +36,9 @@ public class ClientRecordsService {
         return null;
     }
 
-
+    public List<Goal> getGoalsForClient(String id) {
+        return goalRepository.getClientRecordById(id);
+    }
 
 
 
