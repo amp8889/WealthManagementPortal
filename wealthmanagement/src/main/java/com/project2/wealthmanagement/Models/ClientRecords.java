@@ -1,5 +1,8 @@
 package com.project2.wealthmanagement.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.NonNull;
@@ -18,16 +21,20 @@ public class ClientRecords {
     private String clientRecordsId; // Apparently Cosmos likes Strings more than ints for IDs
     private String firstName;
     private String lastName;
+
     private ClientTier clientTier;
     private String country;
     private RiskTolerance riskTolerance;
     private PrimaryObjective primaryObjective;
+    private List<String> goalIds = new ArrayList<>();
+
 
     public ClientRecords() {
     }
 
+
     public ClientRecords(String clientRecordsId, String firstName, String lastName, ClientTier clientTier,
-            String country, RiskTolerance riskTolerance, PrimaryObjective primaryObjective) {
+            String country, RiskTolerance riskTolerance, PrimaryObjective primaryObjective, List<String> goalIds) {
         this.clientRecordsId = clientRecordsId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,63 +42,89 @@ public class ClientRecords {
         this.country = country;
         this.riskTolerance = riskTolerance;
         this.primaryObjective = primaryObjective;
+        this.goalIds = goalIds;
     }
+
 
     public String getClientRecordsId() {
         return clientRecordsId;
     }
 
+
     public void setClientRecordsId(String clientRecordsId) {
         this.clientRecordsId = clientRecordsId;
     }
+
 
     public String getFirstName() {
         return firstName;
     }
 
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
 
     public String getLastName() {
         return lastName;
     }
 
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
 
     public ClientTier getClientTier() {
         return clientTier;
     }
 
+
     public void setClientTier(ClientTier clientTier) {
         this.clientTier = clientTier;
     }
+
 
     public String getCountry() {
         return country;
     }
 
+
     public void setCountry(String country) {
         this.country = country;
     }
+
 
     public RiskTolerance getRiskTolerance() {
         return riskTolerance;
     }
 
+
     public void setRiskTolerance(RiskTolerance riskTolerance) {
         this.riskTolerance = riskTolerance;
     }
+
 
     public PrimaryObjective getPrimaryObjective() {
         return primaryObjective;
     }
 
+
     public void setPrimaryObjective(PrimaryObjective primaryObjective) {
         this.primaryObjective = primaryObjective;
     }
+
+
+    public List<String> getGoalIds() {
+        return goalIds;
+    }
+
+
+    public void setGoalIds(List<String> goalIds) {
+        this.goalIds = goalIds;
+    }
+
 
     @Override
     public int hashCode() {
@@ -104,8 +137,10 @@ public class ClientRecords {
         result = prime * result + ((country == null) ? 0 : country.hashCode());
         result = prime * result + ((riskTolerance == null) ? 0 : riskTolerance.hashCode());
         result = prime * result + ((primaryObjective == null) ? 0 : primaryObjective.hashCode());
+        result = prime * result + ((goalIds == null) ? 0 : goalIds.hashCode());
         return result;
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -142,14 +177,22 @@ public class ClientRecords {
             return false;
         if (primaryObjective != other.primaryObjective)
             return false;
+        if (goalIds == null) {
+            if (other.goalIds != null)
+                return false;
+        } else if (!goalIds.equals(other.goalIds))
+            return false;
         return true;
     }
+
 
     @Override
     public String toString() {
         return "ClientRecords [clientRecordsId=" + clientRecordsId + ", firstName=" + firstName + ", lastName="
                 + lastName + ", clientTier=" + clientTier + ", country=" + country + ", riskTolerance=" + riskTolerance
-                + ", primaryObjective=" + primaryObjective + "]";
+                + ", primaryObjective=" + primaryObjective + ", goalIds=" + goalIds + "]";
     }
+
+    
 
 }
