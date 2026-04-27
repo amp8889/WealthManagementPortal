@@ -46,7 +46,6 @@ public class ClientRecordsService {
     }
 
 
-    @Transactional
     public ClientRecords updateClientRecords(String id, ClientRecords clientRecords){
         clientRecords.setClientRecordsId(id);
         return repository.save(clientRecords);

@@ -34,7 +34,6 @@ public class GoalService {
         return repository.save(goal);
     }
 
-    @Transactional
     public Goal updateGoal(String id, Goal goal) {
         goal.setGoalId(id);
         return repository.save(goal);
