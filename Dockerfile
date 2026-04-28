@@ -5,9 +5,9 @@ WORKDIR /app
 COPY wealthmanagement/pom.xml .
 COPY wealthmanagement/src ./src
 
-RUN mvn package
+RUN mvn package -e
 
-FROM openjdk:25-ea
+FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 
