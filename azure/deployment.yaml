@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wealthmanagement
+  labels:
+    app: wealthmanagement
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wealthmanagement
+  template:
+    metadata:
+      labels:
+        app: wealthmanagement
+    spec:
+      containers:
+      - name: wealthmanagement
+        image: apmpacr.azurecr.io/wealthmanagement:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-secret
+              key: MONGODB_URI
