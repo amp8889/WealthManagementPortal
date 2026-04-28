@@ -11,6 +11,6 @@ import com.project2.wealthmanagement.Models.Goal;
 @Repository
 public interface GoalRepository extends MongoRepository<Goal, String> {
 
-    List<Goal> getClientRecordById(String goalId);
+    // List<Goal> getClientRecordById(String goalId);
 
 }

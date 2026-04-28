@@ -36,9 +36,9 @@ public class ClientRecordsService {
         return null;
     }
 
-    public List<Goal> getGoalsForClient(String id) {
-        return goalRepository.getClientRecordById(id);
-    }
+    // public List<Goal> getGoalsForClient(String id) {
+    //     return goalRepository.getClientRecordById(id);
+    // }
 
 
     public ClientRecords createClientRecords(ClientRecords clientRecords){
