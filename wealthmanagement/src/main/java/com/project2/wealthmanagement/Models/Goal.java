@@ -1,10 +1,8 @@
 package com.project2.wealthmanagement.Models;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.springframework.data.mongodb.core.annotation.Collation;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.project2.wealthmanagement.Enums.GoalType;

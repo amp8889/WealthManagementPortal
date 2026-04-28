@@ -11,7 +11,6 @@ import com.project2.wealthmanagement.Enums.PrimaryObjective;
 import com.project2.wealthmanagement.Enums.RiskTolerance;
 
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 
 @Document(collection = "clientrecords")
 public class ClientRecords {

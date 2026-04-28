@@ -1,0 +1,67 @@
+<div class="p-6">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Client Records</h2>
+    <button pButton label="New Client" icon="pi pi-plus"
+            class="p-button-success"
+            (click)="openNew()"></button>
+  </div>
+
+  <!-- Table -->
+  <p-table [value]="clients" class="shadow-lg rounded-lg">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Tier</th>
+        <th>Country</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-client>
+      <tr>
+        <td>{{ client.firstName }}</td>
+        <td>{{ client.lastName }}</td>
+        <td>{{ client.clientTier }}</td>
+        <td>{{ client.country }}</td>
+        <td class="flex gap-2">
+          <button pButton icon="pi pi-pencil"
+                  class="p-button-warning"
+                  (click)="editClient(client)"></button>
+
+          <button pButton icon="pi pi-trash"
+                  class="p-button-danger"
+                  (click)="deleteClient(client.clientRecordsId!)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Dialog -->
+  <p-dialog [(visible)]="dialogVisible" header="Client Details" [modal]="true" [style]="{width: '400px'}">
+
+    <div class="flex flex-col gap-3">
+
+      <input pInputText [(ngModel)]="selectedClient.firstName" placeholder="First Name" class="w-full" />
+      <input pInputText [(ngModel)]="selectedClient.lastName" placeholder="Last Name" class="w-full" />
+      <input pInputText [(ngModel)]="selectedClient.clientTier" placeholder="Tier" class="w-full" />
+      <input pInputText [(ngModel)]="selectedClient.country" placeholder="Country" class="w-full" />
+
+      <input pInputText [(ngModel)]="selectedClient.riskTolerance" placeholder="Risk Tolerance" class="w-full" />
+      <input pInputText [(ngModel)]="selectedClient.primaryObjective" placeholder="Primary Objective" class="w-full" />
+
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancel" class="p-button-text"
+              (click)="dialogVisible=false"></button>
+
+      <button pButton label="Save"
+              (click)="saveClient()"></button>
+    </ng-template>
+
+  </p-dialog>
+
+</div>
