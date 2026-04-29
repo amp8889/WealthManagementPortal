@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ClientRecordsService } from '../services/ClientRecords';
 import { ClientRecord } from '../types/ClientRecord';
 import { TableModule } from 'primeng/table';
@@ -10,7 +10,7 @@ import { table } from 'console';
 
 @Component({
   selector: 'app-client-records',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule],
   templateUrl: './client-records.html',
   styleUrl: './client-records.css',
 })
@@ -20,7 +20,7 @@ export class ClientRecords implements OnInit {
 
 
 
-  clients: ClientRecord[] = [];
+  clients = signal<ClientRecord[]>([]);
   selectedClient: ClientRecord = this.emptyClient();
   dialogVisible = false;
   constructor(private clientService: ClientRecordsService) {}
@@ -42,9 +42,18 @@ export class ClientRecords implements OnInit {
       goalIds: []
     };
   }
+
+
   loadClients() {
-    this.clientService.getAll().subscribe(data => {
-      this.clients = data;
+    this.clientService.getAll().subscribe({
+      next:(data) => {
+        this.clients.set(data);
+      },
+
+      error:(err) => {
+        console.error(err)
+      }
+      
     });
   }
 
@@ -55,10 +64,10 @@ export class ClientRecords implements OnInit {
     this.dialogVisible = true;
   }
 
-  // editClient(client: ClientRecords) {
-  //   this.selectedClient = { ...client };
-  //   this.dialogVisible = true;
-  // }
+  editClient(client: ClientRecord) {
+    this.selectedClient = { ...client };
+    this.dialogVisible = true;
+  }
 
   saveClient() {
     if (this.selectedClient.clientRecordsId) {

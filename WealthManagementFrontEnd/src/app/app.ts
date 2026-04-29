@@ -1,12 +1,20 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import {ButtonModule } from "primeng/button";
+import {MenubarModule } from "primeng/menubar";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ButtonModule, MenubarModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('WealthManagementFrontEnd');
-}
+  constructor(
+    private router: Router
+  ) {}
+  
+  navItems: MenuItem[] = [
+    {label: "Movies", command: () => this.router.navigate(["/client_records"])}
+  ]}
