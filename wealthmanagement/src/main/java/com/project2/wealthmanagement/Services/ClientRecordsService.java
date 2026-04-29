@@ -47,7 +47,7 @@ public class ClientRecordsService {
 
 
     public ClientRecords updateClientRecords(String id, ClientRecords clientRecords){
-        clientRecords.setClientRecordsId(id);
+        clientRecords.setid(id);
         return repository.save(clientRecords);
     }
 

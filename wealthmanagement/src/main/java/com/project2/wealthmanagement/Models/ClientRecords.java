@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.lang.NonNull;
 import com.project2.wealthmanagement.Enums.ClientTier;
 import com.project2.wealthmanagement.Enums.PrimaryObjective;
@@ -16,8 +17,7 @@ import jakarta.persistence.Id;
 public class ClientRecords {
 
     @Id
-    @NonNull
-    private String clientRecordsId; // Apparently Cosmos likes Strings more than ints for IDs
+    private String id; // Apparently Cosmos likes Strings more than ints for IDs
     private String firstName;
     private String lastName;
 
@@ -32,9 +32,9 @@ public class ClientRecords {
     }
 
 
-    public ClientRecords(String clientRecordsId, String firstName, String lastName, ClientTier clientTier,
-            String country, RiskTolerance riskTolerance, PrimaryObjective primaryObjective, List<String> goalIds) {
-        this.clientRecordsId = clientRecordsId;
+    public ClientRecords(String id, String firstName, String lastName, ClientTier clientTier,
+        String country, RiskTolerance riskTolerance, PrimaryObjective primaryObjective, List<String> goalIds) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.clientTier = clientTier;
@@ -45,13 +45,13 @@ public class ClientRecords {
     }
 
 
-    public String getClientRecordsId() {
-        return clientRecordsId;
+    public String getid() {
+        return id;
     }
 
 
-    public void setClientRecordsId(String clientRecordsId) {
-        this.clientRecordsId = clientRecordsId;
+    public void setid(String id) {
+        this.id = id;
     }
 
 
@@ -129,7 +129,7 @@ public class ClientRecords {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((clientRecordsId == null) ? 0 : clientRecordsId.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((clientTier == null) ? 0 : clientTier.hashCode());
@@ -150,10 +150,10 @@ public class ClientRecords {
         if (getClass() != obj.getClass())
             return false;
         ClientRecords other = (ClientRecords) obj;
-        if (clientRecordsId == null) {
-            if (other.clientRecordsId != null)
+        if (id == null) {
+            if (other.id != null)
                 return false;
-        } else if (!clientRecordsId.equals(other.clientRecordsId))
+        } else if (!id.equals(other.id))
             return false;
         if (firstName == null) {
             if (other.firstName != null)
@@ -187,7 +187,7 @@ public class ClientRecords {
 
     @Override
     public String toString() {
-        return "ClientRecords [clientRecordsId=" + clientRecordsId + ", firstName=" + firstName + ", lastName="
+        return "ClientRecords [id=" + id + ", firstName=" + firstName + ", lastName="
                 + lastName + ", clientTier=" + clientTier + ", country=" + country + ", riskTolerance=" + riskTolerance
                 + ", primaryObjective=" + primaryObjective + ", goalIds=" + goalIds + "]";
     }
