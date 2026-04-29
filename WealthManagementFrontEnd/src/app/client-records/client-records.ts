@@ -10,10 +10,11 @@ import { table } from 'console';
 import { ClientTier } from '../types/ClientTier';
 import { RiskTolerance } from '../types/RiskTolerance';
 import { PrimaryObjective } from '../types/PrimaryObjective';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-client-records',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select],
   templateUrl: './client-records.html',
   styleUrl: './client-records.css',
 })
