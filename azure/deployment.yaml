@@ -16,12 +16,16 @@ spec:
     spec:
       containers:
       - name: wealthmanagement
-        image: apmpacr.azurecr.io/wealthmanagement:v1
+        image: apmpacr.azurecr.io/wealthmanagement:v2
         ports:
         - containerPort: 8080
         env:
-        - name: MONGODB_URI
+        - name: SPRING_APPLICATION_NAME
+          value: wealthmanagement
+        - name: SPRING_DATA_MONGODB_URI
           valueFrom:
             secretKeyRef:
               name: cosmosdb-secret
               key: MONGODB_URI
+        - name: SPRING_DATA_MONGODB_DATABASE
+          value: "wealthmanagement-db"
