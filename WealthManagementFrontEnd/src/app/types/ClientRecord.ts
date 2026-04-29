@@ -1,5 +1,5 @@
-export interface ClientRecord {
-  clientRecordsId?: string;
+export type ClientRecord = {
+  id?: string;
   firstName: string;
   lastName: string;
   clientTier: string;
