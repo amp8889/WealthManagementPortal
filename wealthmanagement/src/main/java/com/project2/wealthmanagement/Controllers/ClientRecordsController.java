@@ -24,11 +24,9 @@ public class ClientRecordsController {
 
     private final ClientRecordsService service;
 
-    public ClientRecordsController(ClientRecordsService service){
+    public ClientRecordsController(ClientRecordsService service) {
         this.service = service;
     }
-
-
 
     @GetMapping
     public ResponseEntity<List<ClientRecords>> getAllClientRecords() {
@@ -40,17 +38,14 @@ public class ClientRecordsController {
         return ResponseEntity.ok(service.getClientRecordById(id));
     }
 
-
-
-
     @PostMapping
     public ResponseEntity<ClientRecords> createClientRecords(@RequestBody ClientRecords clientRecords) {
         return ResponseEntity.ok(service.createClientRecords(clientRecords));
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<ClientRecords> updateClientRecord(@PathVariable String id, @Valid @RequestBody ClientRecords newClientRecord) {
+    public ResponseEntity<ClientRecords> updateClientRecord(@PathVariable String id,
+            @Valid @RequestBody ClientRecords newClientRecord) {
         ClientRecords existingClientRecord = service.getClientRecordById(id);
         if (existingClientRecord == null) {
             return ResponseEntity.notFound().build();
@@ -58,8 +53,6 @@ public class ClientRecordsController {
 
         return new ResponseEntity<>(service.updateClientRecords(id, newClientRecord), HttpStatus.OK);
     }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClientRecord(@PathVariable String id) {
