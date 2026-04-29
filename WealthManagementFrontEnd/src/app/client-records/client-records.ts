@@ -7,6 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { table } from 'console';
+import { ClientTier } from '../types/ClientTier';
 
 @Component({
   selector: 'app-client-records',
@@ -24,6 +25,10 @@ export class ClientRecords implements OnInit {
   selectedClient: ClientRecord = this.emptyClient();
   dialogVisible = false;
   constructor(private clientService: ClientRecordsService) {}
+
+
+  clientTierOptions = Object.values(ClientTier);
+
 
   ngOnInit(): void {
     this.loadClients();
