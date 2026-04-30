@@ -1,0 +1,27 @@
+<p>delete-confirmation-modal works!</p>
+<p-dialog
+    [modal]="true"
+    header="Confirm Delete"
+    [visible]="visible()"
+>
+    <p>Are you sure you want to delete <strong>{{ recordName() }}</strong>? This action cannot be undone.</p>
+
+    <ng-template #footer>
+        <div class="flex gap-2 justify-end">
+            <!-- fire the events created with output() when buttons are clicked -->
+            <p-button 
+                label="Cancel"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="cancelled.emit()"    
+            />
+            <p-button 
+                label="Delete"
+                severity="danger"
+                [outlined]="true"
+                (onClick)="confirmed.emit()"    
+            />
+        </div>
+    </ng-template>
+
+</p-dialog>
