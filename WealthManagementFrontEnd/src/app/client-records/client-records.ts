@@ -11,15 +11,15 @@ import { ClientTier } from '../types/ClientTier';
 import { RiskTolerance } from '../types/RiskTolerance';
 import { PrimaryObjective } from '../types/PrimaryObjective';
 import { Select } from 'primeng/select';
+import { DeleteConfirmationModal } from '../components/delete-confirmation-modal/delete-confirmation-modal';
 
 @Component({
   selector: 'app-client-records',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal],
   templateUrl: './client-records.html',
   styleUrl: './client-records.css',
 })
 export class ClientRecords implements OnInit {
-
 
 
 
@@ -64,17 +64,7 @@ export class ClientRecords implements OnInit {
 
 
 
-  // emptyClient(): ClientRecord {
-  //   return {
-  //     firstName: '',
-  //     lastName: '',
-  //     clientTier: '',
-  //     country: '',
-  //     riskTolerance: '',
-  //     primaryObjective: '',
-  //     goalIds: []
-  //   };
-  // }
+
 
 
   loadClients() {
@@ -92,15 +82,7 @@ export class ClientRecords implements OnInit {
 
 
 
-  // openNew() {
-  //   this.selectedClient = this.emptyClient();
-  //   this.dialogVisible = true;
-  // }
 
-  // editClient(client: ClientRecord) {
-  //   this.selectedClient = { ...client };
-  //   this.dialogVisible = true;
-  // }
 
 
 
@@ -202,7 +184,7 @@ export class ClientRecords implements OnInit {
 
 
 
-  handleDeleteMovie(clientRecord: ClientRecord) {
+  handleDeleteClientRecord(clientRecord: ClientRecord) {
     this.selectedClient.set(clientRecord);
     this.showDeleteDialog.set(true);
   }
@@ -212,12 +194,14 @@ export class ClientRecords implements OnInit {
   deleteClient() {
 
     if(this.selectedClient() === null || this.selectedClient()!.id === null) {
+      console.log("NO ID")
       return
     }
 
     this.clientService.delete(this.selectedClient()!.id!).subscribe({
       next: () => {
         this.clients.update((currentList) => currentList.filter(clientRecords => clientRecords.id !== this.selectedClient()!.id));
+        this,this.showDeleteDialog.set(false);
       },
       error: (err) =>{
         console.log(err)
