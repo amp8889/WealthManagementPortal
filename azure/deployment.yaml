@@ -28,4 +28,4 @@ spec:
               name: cosmosdb-secret
               key: MONGODB_URI
         - name: SPRING_DATA_MONGODB_DATABASE
-          value: "wealthmanagement-db"
+          value: "apmp-cosmos"
