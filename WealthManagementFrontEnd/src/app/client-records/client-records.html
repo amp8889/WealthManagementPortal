@@ -3,9 +3,8 @@
 
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-2xl font-bold">Client Records</h2>
-    <button pButton label="New Client" icon="pi pi-plus"
-            class="p-button-success"
-            (click)="showFormDialog.set(true); form.reset(); selectedClient.set(null)">
+    <button pButton label="New Client" icon="pi pi-plus" class="p-button-success"
+      (click)="showFormDialog.set(true); form.reset(); selectedClient.set(null)">
     </button>
   </div>
 
@@ -17,6 +16,8 @@
         <th>Last Name</th>
         <th>Tier</th>
         <th>Country</th>
+        <th>Risk</th>
+        <th>Objective</th>
         <th>Actions</th>
       </tr>
     </ng-template>
@@ -27,12 +28,12 @@
         <td>{{ client.lastName }}</td>
         <td>{{ client.clientTier }}</td>
         <td>{{ client.country }}</td>
+        <td>{{client.riskTolerance}}</td>
+        <td>{{client.primaryObjective}}</td>
         <td class="flex gap-2">
 
 
-          <button pButton icon="pi pi-pencil"
-                  class="p-button-warning"
-                  (click)="
+          <button pButton icon="pi pi-pencil" class="p-button-warning" (click)="
                     selectedClient.set(client);
                     form.patchValue(client);
                     showFormDialog.set(true)
@@ -40,9 +41,7 @@
           </button>
 
 
-          <button pButton icon="pi pi-trash"
-                  class="p-button-danger"
-                  (click)="
+          <button pButton icon="pi pi-trash" class="p-button-danger" (click)="
                   
                   handleDeleteClientRecord(client);
                   ">
@@ -52,22 +51,14 @@
       </tr>
     </ng-template>
   </p-table>
-  
-<app-delete-confirmation-modal
-  [visible]="showDeleteDialog()"
-  [recordName]="selectedClient()?.firstName || 'this client'"
 
-  (confirmed)="deleteClient()"
-  (cancelled)="showDeleteDialog.set(false)">
-</app-delete-confirmation-modal>
+  <app-delete-confirmation-modal [visible]="showDeleteDialog()"
+    [recordName]="selectedClient()?.firstName || 'this client'" (confirmed)="deleteClient()"
+    (cancelled)="showDeleteDialog.set(false)">
+  </app-delete-confirmation-modal>
 
-  <p-dialog
-    [visible]="showFormDialog()"
-    (visibleChange)="showFormDialog.set($event)"
-    header="Client Details"
-    [modal]="true"
-    [style]="{width: '400px'}"
-  >
+  <p-dialog [visible]="showFormDialog()" (visibleChange)="showFormDialog.set($event)" header="Client Details"
+    [modal]="true" [style]="{width: '400px'}">
 
     <form [formGroup]="form" class="flex flex-col gap-3">
 
@@ -76,42 +67,26 @@
       <input pInputText formControlName="country" placeholder="Country" class="w-full" />
 
 
-<p-select 
-  [options]="clientTierOptions"
-  optionLabel="label"
-  optionValue="value"
-  formControlName="clientTier">
-</p-select>
+      <p-select [options]="clientTierOptions" formControlName="clientTier" optionLabel="label" optionValue="value"
+        placeholder="Client Tier" class="w-full">
+      </p-select>
 
-      <p-select
-      [options]="riskToleranceOptions"
-      formControlName="riskTolerance"
-        optionLabel="label"
-  optionValue="value"
-      placeholder="Risk Tolerance"
-      class="w-full">
-    </p-select>
+      <p-select [options]="riskToleranceOptions" formControlName="riskTolerance" optionLabel="label" optionValue="value"
+        placeholder="Risk Tolerance" class="w-full">
+      </p-select>
 
-    <p-select
-      [options]="primaryObjectiveOptions"
-      formControlName="primaryObjective"
-        optionLabel="label"
-  optionValue="value"
-      placeholder="Primary Objective"
-      class="w-full">
-    </p-select>
+      <p-select [options]="primaryObjectiveOptions" formControlName="primaryObjective" optionLabel="label"
+        optionValue="value" placeholder="Primary Objective" class="w-full">
+      </p-select>
 
 
     </form>
 
     <ng-template pTemplate="footer">
-      <button pButton label="Cancel" class="p-button-text"
-              (click)="showFormDialog.set(false)">
+      <button pButton label="Cancel" class="p-button-text" (click)="showFormDialog.set(false)">
       </button>
 
-      <button pButton label="Save"
-              [disabled]="form.invalid"
-              (click)="saveClient()">
+      <button pButton label="Save" [disabled]="form.invalid" (click)="saveClient()">
       </button>
     </ng-template>
 

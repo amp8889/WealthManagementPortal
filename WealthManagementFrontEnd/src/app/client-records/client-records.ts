@@ -106,18 +106,18 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
     }
 
     const {id, firstName, lastName, clientTier, country, riskTolerance, primaryObjective, goalIds} = this.form.value;
-    const clientTierKey = Object.entries(ClientTier).find(([, val]) => val === clientTier)?.[0];
-    const riskToleranceKey = Object.entries(RiskTolerance).find(([, val]) => val === riskTolerance)?.[0];
-    const primaryObjectiveKey = Object.entries(PrimaryObjective).find(([, val]) => val === primaryObjective)?.[0];
+    // const clientTierKey = Object.entries(ClientTier).find(([, val]) => val === clientTier)?.[0];
+    // const riskToleranceKey = Object.entries(RiskTolerance).find(([, val]) => val === riskTolerance)?.[0];
+    // const primaryObjectiveKey = Object.entries(PrimaryObjective).find(([, val]) => val === primaryObjective)?.[0];
 
     const payload: ClientRecord = {
       // clientRecordsId: "1",
       firstName,
       lastName,
-      clientTier: clientTierKey as ClientTier,
+      clientTier,
       country,
-      riskTolerance: riskToleranceKey as RiskTolerance,
-      primaryObjective: primaryObjectiveKey as PrimaryObjective,
+      riskTolerance,
+      primaryObjective,
       goalIds
     }
 
