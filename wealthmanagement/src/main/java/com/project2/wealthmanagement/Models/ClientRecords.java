@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mongodb.lang.NonNull;
 import com.project2.wealthmanagement.Enums.ClientTier;
 import com.project2.wealthmanagement.Enums.PrimaryObjective;
 import com.project2.wealthmanagement.Enums.RiskTolerance;
