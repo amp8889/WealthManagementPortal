@@ -2,6 +2,7 @@ package com.project2.wealthmanagement.Services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,9 @@ public class ClientRecordsService {
 
 
     public ClientRecords createClientRecords(ClientRecords clientRecords){
+        if (clientRecords.getId() == null || clientRecords.getId().isEmpty()) {
+            clientRecords.setId(UUID.randomUUID().toString());
+        }
         return repository.save(clientRecords);
     }
 
