@@ -43,9 +43,9 @@
           <button pButton icon="pi pi-trash"
                   class="p-button-danger"
                   (click)="
-                  selectedClient.set(client);
+                  
                   handleDeleteClientRecord(client);
-                  showDeleteDialog.set(true)">
+                  ">
           </button>
 
         </td>
@@ -76,17 +76,18 @@
       <input pInputText formControlName="country" placeholder="Country" class="w-full" />
 
 
-      <p-select
-        [options]="clientTierOptions"
-
-        formControlName="clientTier"
-        placeholder="Select Tier"
-        class="w-full">
-      </p-select>
+<p-select 
+  [options]="clientTierOptions"
+  optionLabel="label"
+  optionValue="value"
+  formControlName="clientTier">
+</p-select>
 
       <p-select
       [options]="riskToleranceOptions"
       formControlName="riskTolerance"
+        optionLabel="label"
+  optionValue="value"
       placeholder="Risk Tolerance"
       class="w-full">
     </p-select>
@@ -94,6 +95,8 @@
     <p-select
       [options]="primaryObjectiveOptions"
       formControlName="primaryObjective"
+        optionLabel="label"
+  optionValue="value"
       placeholder="Primary Objective"
       class="w-full">
     </p-select>

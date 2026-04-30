@@ -39,9 +39,19 @@ export class ClientRecords implements OnInit {
   }
 
 
-  clientTierOptions = Object.values(ClientTier);
-  riskToleranceOptions = Object.values(RiskTolerance);
-  primaryObjectiveOptions = Object.values(PrimaryObjective);
+clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
+  label: value,  
+  value: key      
+}));
+
+  riskToleranceOptions = Object.entries(RiskTolerance).map(([key, value]) => ({
+    label: value,
+    value: key
+  }));
+  primaryObjectiveOptions = Object.entries(PrimaryObjective).map(([key, value]) => ({
+    label: value,
+    value: key
+  }));
 
   form!: FormGroup;
 
@@ -167,16 +177,16 @@ export class ClientRecords implements OnInit {
     
     // track which movie was selected
     this.selectedClient.set(clientRecord);
-
     // pre-filling form with values
     this.form.setValue({
       firstName: clientRecord.firstName,
       lastName: clientRecord.lastName,
-      clientTier: ClientTier[clientRecord.clientTier as string as keyof typeof ClientTier],
+      clientTier: clientRecord.clientTier,
       country: clientRecord.country,
-      riskTolerance: RiskTolerance[clientRecord.riskTolerance as string as keyof typeof RiskTolerance],
-      primaryObjective: PrimaryObjective[clientRecord.primaryObjective as string as keyof typeof PrimaryObjective]
+      riskTolerance: clientRecord.riskTolerance,
+      primaryObjective: clientRecord.primaryObjective
     })
+    
 
     // open the dialog
     this.showFormDialog.set(true);
