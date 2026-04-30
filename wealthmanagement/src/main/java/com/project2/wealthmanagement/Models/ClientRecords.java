@@ -3,7 +3,9 @@ package com.project2.wealthmanagement.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.lang.NonNull;
@@ -11,12 +13,13 @@ import com.project2.wealthmanagement.Enums.ClientTier;
 import com.project2.wealthmanagement.Enums.PrimaryObjective;
 import com.project2.wealthmanagement.Enums.RiskTolerance;
 
-import jakarta.persistence.Id;
 
 @Document(collection = "clientrecords")
 public class ClientRecords {
 
     @Id
+    @Field("_id")
+    @JsonProperty("id")
     private String id; // Apparently Cosmos likes Strings more than ints for IDs
     private String firstName;
     private String lastName;
@@ -45,12 +48,12 @@ public class ClientRecords {
     }
 
 
-    public String getid() {
+    public String getId() {
         return id;
     }
 
 
-    public void setid(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 

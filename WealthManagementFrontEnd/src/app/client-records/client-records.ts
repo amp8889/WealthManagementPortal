@@ -178,8 +178,57 @@ export class ClientRecords implements OnInit {
 
 
 
-  deleteClient(id: string) {
-    this.clientService.delete(id).subscribe(() => this.loadClients());
+  handleUpdateClientRecord(clientRecord: ClientRecord) {
+
+    console.log("SELECTED Client Record:");
+    console.log(clientRecord);
+    
+    // track which movie was selected
+    this.selectedClient.set(clientRecord);
+
+    // pre-filling form with values
+    this.form.setValue({
+      firstName: clientRecord.firstName,
+      lastName: clientRecord.lastName,
+      clientTier: ClientTier[clientRecord.clientTier as string as keyof typeof ClientTier],
+      country: clientRecord.country,
+      riskTolerance: RiskTolerance[clientRecord.riskTolerance as string as keyof typeof RiskTolerance],
+      primaryObjective: PrimaryObjective[clientRecord.primaryObjective as string as keyof typeof PrimaryObjective]
+    })
+
+    // open the dialog
+    this.showFormDialog.set(true);
+  }
+
+
+
+  handleDeleteMovie(clientRecord: ClientRecord) {
+    this.selectedClient.set(clientRecord);
+    this.showDeleteDialog.set(true);
+  }
+
+
+
+  deleteClient() {
+
+    if(this.selectedClient() === null || this.selectedClient()!.id === null) {
+      return
+    }
+
+    this.clientService.delete(this.selectedClient()!.id!).subscribe({
+      next: () => {
+        this.clients.update((currentList) => currentList.filter(clientRecords => clientRecords.id !== this.selectedClient()!.id));
+      },
+      error: (err) =>{
+        console.log(err)
+        this.showDeleteDialog.set(false);
+      }
+
+
+    })
+
+
+
   }
 
 

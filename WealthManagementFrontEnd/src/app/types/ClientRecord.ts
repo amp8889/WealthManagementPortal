@@ -1,5 +1,5 @@
 export type ClientRecord = {
-  id?: string;
+  id: string;
   firstName: string;
   lastName: string;
   clientTier: string;
