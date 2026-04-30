@@ -60,7 +60,7 @@
   <p-dialog [visible]="showFormDialog()" (visibleChange)="showFormDialog.set($event)" header="Client Details"
     [modal]="true" [style]="{width: '400px'}">
 
-    <form [formGroup]="form" class="flex flex-col gap-3">
+    <form [formGroup]="form" class="flex flex-col gap-5">
 
       <input pInputText formControlName="firstName" placeholder="First Name" class="w-full" />
       <input pInputText formControlName="lastName" placeholder="Last Name" class="w-full" />
@@ -68,15 +68,15 @@
 
 
       <p-select [options]="clientTierOptions" formControlName="clientTier" optionLabel="label" optionValue="value"
-        placeholder="Client Tier" class="w-full">
+        placeholder="Client Tier" class="w-full" appendTo="body">
       </p-select>
 
       <p-select [options]="riskToleranceOptions" formControlName="riskTolerance" optionLabel="label" optionValue="value"
-        placeholder="Risk Tolerance" class="w-full">
+        placeholder="Risk Tolerance" class="w-full" appendTo="body">
       </p-select>
 
       <p-select [options]="primaryObjectiveOptions" formControlName="primaryObjective" optionLabel="label"
-        optionValue="value" placeholder="Primary Objective" class="w-full">
+        optionValue="value" placeholder="Primary Objective" class="w-full" appendTo="body">>
       </p-select>
 
 
