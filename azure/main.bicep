@@ -12,7 +12,6 @@ param cosmosAccName string = '${appPrefix}-cosmos-account'
 param cosmosAccType string = 'Standard'
 param cosmosAccKind string = 'MongoDB' // Use MongoDB API
 
-
 resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2025-10-15' = {
   name: cosmosAccName
   location: location
@@ -66,7 +65,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2026-01-01' = {
   location: location
   properties: {
     dnsPrefix: appName
-    agentPoolProfiles:[
+    agentPoolProfiles: [
       {
         name: appPrefix
         count: 2
@@ -75,7 +74,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2026-01-01' = {
       }
     ]
   }
-    identity: {
-    type: 'SystemAssigned'
-  }
+identity: {
+type: 'SystemAssigned'
+}
 }

@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: wealthmanagement
+  
+  data:
+    mongodb:
+      database: apmp-cosmos
+      uri: INSERT MONGODB URI HERE
+  
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: GOOGLE OAUTH2 CLIENT ID
+            client-secret: GOOGLE OAUTH2 CLIENT SECRET
+            scope:
+              - profile
+              - email
