@@ -149,27 +149,6 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
   }
 
 
-  handleCreateMovie(){
-    this.selectedClient.set(null)
-
-    this.form.setValue({
-      firstName: "",
-      lastName: "",
-      clientTier: null,
-      country: "",
-      riskTolerance: null,
-      primaryObjective: null,
-      goalIds: ""
-
-
-    })
-    this.showFormDialog.set(true);
-
-  }
-
-
-
-
   handleUpdateClientRecord(clientRecord: ClientRecord) {
 
     console.log("SELECTED Client Record:");
