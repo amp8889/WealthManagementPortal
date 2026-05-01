@@ -1,10 +1,10 @@
 package com.project2.wealthmanagement.Models;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.project2.wealthmanagement.Enums.UserRole;
 
-import jakarta.persistence.Id;
 
 @Document(collection = "user")
 public class User {
