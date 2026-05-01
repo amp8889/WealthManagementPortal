@@ -29,3 +29,5 @@ spec:
               key: MONGODB_URI
         - name: SPRING_DATA_MONGODB_DATABASE
           value: "apmp-cosmos"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "test"

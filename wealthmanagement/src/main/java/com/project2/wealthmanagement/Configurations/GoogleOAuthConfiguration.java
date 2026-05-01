@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,7 +26,9 @@ public class GoogleOAuthConfiguration {
     @Autowired
     private UserService userService;
 
+    // Enable Spring Security for dev profile
     @Bean
+    @Profile("test")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(Customizer.withDefaults())
@@ -37,7 +40,16 @@ public class GoogleOAuthConfiguration {
         return http.build();
     }
 
+    // Disable Spring Security for dev profile
     @Bean
+    @Profile("dev")
+    public SecurityFilterChain devFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable());
+        return http.build();
+    }
+
     public AuthenticationSuccessHandler oauth2SuccessHandler() {
         return new AuthenticationSuccessHandler() {
             @Override
@@ -52,7 +64,7 @@ public class GoogleOAuthConfiguration {
                         principal.getAttribute("family_name"), // lastName
                         principal.getAttribute("picture") // avatarUrl
                 );
-                response.sendRedirect("http://apmpwealthmanagement.eastus.cloudapp.azure.com");
+                response.sendRedirect("http://wealthmanagementportal.eastus.cloudapp.azure.com");
             }
         };
     }
