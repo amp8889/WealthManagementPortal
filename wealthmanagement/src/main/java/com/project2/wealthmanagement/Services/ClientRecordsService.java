@@ -11,8 +11,6 @@ import com.project2.wealthmanagement.Models.Goal;
 import com.project2.wealthmanagement.Repositories.ClientRecordsRepository;
 import com.project2.wealthmanagement.Repositories.GoalRepository;
 
-import jakarta.transaction.Transactional;
-
 @Service
 public class ClientRecordsService {
 

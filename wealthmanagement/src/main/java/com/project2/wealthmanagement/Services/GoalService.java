@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import com.project2.wealthmanagement.Models.Goal;
 import com.project2.wealthmanagement.Repositories.GoalRepository;
 
-import jakarta.transaction.Transactional;
-
 @Service
 public class GoalService {
 

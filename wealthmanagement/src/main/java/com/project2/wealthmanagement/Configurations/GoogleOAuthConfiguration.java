@@ -26,10 +26,11 @@ public class GoogleOAuthConfiguration {
     @Autowired
     private UserService userService;
 
-    // Enable Spring Security for dev profile
+    // Enable Spring Security for test profile
     @Bean
     @Profile("test")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("RUNNING TEST");
         http
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
@@ -44,6 +45,7 @@ public class GoogleOAuthConfiguration {
     @Bean
     @Profile("dev")
     public SecurityFilterChain devFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("RUNNING DEV");
         http
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable())

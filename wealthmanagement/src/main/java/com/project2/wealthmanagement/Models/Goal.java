@@ -2,12 +2,11 @@ package com.project2.wealthmanagement.Models;
 
 import java.time.LocalDate;
 
-
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.project2.wealthmanagement.Enums.GoalType;
 
-import jakarta.persistence.Id;
 
 @Document(collection = "goal")
 public class Goal {
