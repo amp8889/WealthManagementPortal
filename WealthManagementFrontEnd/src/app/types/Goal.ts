@@ -3,7 +3,7 @@ export interface Goal {
   goalName: string;
   targetAmount: number;
   goalType: string;
-  goalDate: string; // ISO string
+  goalDate: string | null; 
   currentSavedAmount: number;
   clientId: string;
 }

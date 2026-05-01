@@ -10,11 +10,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { DeleteConfirmationModal } from '../components/delete-confirmation-modal/delete-confirmation-modal';
 import { CommonModule } from '@angular/common';
+import { DatePicker } from 'primeng/datepicker';
 
 
 @Component({
   selector: 'app-goal',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, CommonModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, CommonModule, DatePicker],
   templateUrl: './goal.html',
   styleUrl: './goal.css',
 })
@@ -88,12 +89,19 @@ export class Goal implements OnInit {
 
     const { goalName, targetAmount, goalType, goalDate, currentSavedAmount, clientId} = this.form.value;
 
+
+    const formattedDate = goalDate
+      ? new Date(goalDate).toISOString().split('T')[0]
+      : null;
+
+
+
     const payload: GoalModel = {
       // clientRecordsId: "1",
       goalName,
       targetAmount,
       goalType,
-      goalDate,
+      goalDate: formattedDate,
       currentSavedAmount,
       clientId
     }

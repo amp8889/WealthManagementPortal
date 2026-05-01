@@ -103,11 +103,12 @@
         formControlName="currentSavedAmount" 
         placeholder="Saved Amount" />
 
-      <input 
-        pInputText 
-        formControlName="goalDate" 
-        placeholder="Goal Date" 
-        class="col-span-2" />
+            <p-datepicker appendTo="body"
+            formControlName="goalDate"
+            dateFormat="yy-mm-dd"
+            showIcon="true"
+            class="w-full">
+            </p-datepicker>
 
       <p-select 
         [options]="goalType" 

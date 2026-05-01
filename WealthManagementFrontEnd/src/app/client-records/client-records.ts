@@ -12,10 +12,13 @@ import { RiskTolerance } from '../types/RiskTolerance';
 import { PrimaryObjective } from '../types/PrimaryObjective';
 import { Select } from 'primeng/select';
 import { DeleteConfirmationModal } from '../components/delete-confirmation-modal/delete-confirmation-modal';
+import { DatePickerModule } from 'primeng/datepicker';
+
+
 
 @Component({
   selector: 'app-client-records',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, DatePickerModule],
   templateUrl: './client-records.html',
   styleUrl: './client-records.css',
 })
