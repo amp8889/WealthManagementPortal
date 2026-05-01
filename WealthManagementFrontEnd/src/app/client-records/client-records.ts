@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { table } from 'console';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClientTier } from '../types/ClientTier';
 import { RiskTolerance } from '../types/RiskTolerance';
@@ -141,26 +142,26 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
   }
 
 
-  // handleUpdateClientRecord(clientRecord: ClientRecord) {
+  handleUpdateClientRecord(clientRecord: ClientRecord) {
 
-  //   console.log("SELECTED Client Record:");
-  //   console.log(clientRecord);
+    console.log("SELECTED Client Record:");
+    console.log(clientRecord);
     
-  //   this.selectedClient.set(clientRecord);
-  //   // This is for pre-filling form with values that are already set
-  //   this.form.setValue({
-  //     firstName: clientRecord.firstName,
-  //     lastName: clientRecord.lastName,
-  //     clientTier: clientRecord.clientTier,
-  //     country: clientRecord.country,
-  //     riskTolerance: clientRecord.riskTolerance,
-  //     primaryObjective: clientRecord.primaryObjective
-  //   })
+    this.selectedClient.set(clientRecord);
+    // This is for pre-filling form with values that are already set
+    this.form.setValue({
+      firstName: clientRecord.firstName,
+      lastName: clientRecord.lastName,
+      clientTier: clientRecord.clientTier,
+      country: clientRecord.country,
+      riskTolerance: clientRecord.riskTolerance,
+      primaryObjective: clientRecord.primaryObjective
+    })
     
 
     
-  //   this.showFormDialog.set(true);
-  // }
+    this.showFormDialog.set(true);
+  }
 
 
 
