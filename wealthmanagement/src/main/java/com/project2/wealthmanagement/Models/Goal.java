@@ -2,18 +2,17 @@ package com.project2.wealthmanagement.Models;
 
 import java.time.LocalDate;
 
-
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.project2.wealthmanagement.Enums.GoalType;
 
-import jakarta.persistence.Id;
 
 @Document(collection = "goal")
 public class Goal {
 
     @Id
-    private String goalId;
+    private String id;
     private String goalName;
     private int targetAmount;
     private GoalType goalType;
@@ -26,7 +25,7 @@ public class Goal {
 
     public Goal(String goalId, String goalName, int targetAmount, GoalType goalType, LocalDate goalDate,
             int currentSavedAmount, String clientId) {
-        this.goalId = goalId;
+        this.id = goalId;
         this.goalName = goalName;
         this.targetAmount = targetAmount;
         this.goalType = goalType;
@@ -35,12 +34,12 @@ public class Goal {
         this.clientId = clientId;
     }
 
-    public String getGoalId() {
-        return goalId;
+    public String getId() {
+        return id;
     }
 
-    public void setGoalId(String goalId) {
-        this.goalId = goalId;
+    public void setId(String goalId) {
+        this.id = goalId;
     }
 
     public String getGoalName() {
@@ -95,7 +94,7 @@ public class Goal {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((goalId == null) ? 0 : goalId.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((goalName == null) ? 0 : goalName.hashCode());
         result = prime * result + targetAmount;
         result = prime * result + ((goalType == null) ? 0 : goalType.hashCode());
@@ -114,10 +113,10 @@ public class Goal {
         if (getClass() != obj.getClass())
             return false;
         Goal other = (Goal) obj;
-        if (goalId == null) {
-            if (other.goalId != null)
+        if (id == null) {
+            if (other.id != null)
                 return false;
-        } else if (!goalId.equals(other.goalId))
+        } else if (!id.equals(other.id))
             return false;
         if (goalName == null) {
             if (other.goalName != null)
@@ -145,7 +144,7 @@ public class Goal {
 
     @Override
     public String toString() {
-        return "Goal [goalId=" + goalId + ", goalName=" + goalName + ", targetAmount=" + targetAmount + ", goalType="
+        return "Goal [goalId=" + id + ", goalName=" + goalName + ", targetAmount=" + targetAmount + ", goalType="
                 + goalType + ", goalDate=" + goalDate + ", currentSavedAmount=" + currentSavedAmount + ", clientId="
                 + clientId + "]";
     }

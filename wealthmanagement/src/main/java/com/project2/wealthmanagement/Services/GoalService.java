@@ -2,6 +2,7 @@ package com.project2.wealthmanagement.Services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -31,11 +32,14 @@ public class GoalService {
     }
 
     public Goal createGoal(Goal goal) {
+                if (goal.getId() == null || goal.getId().isEmpty()) {
+            goal.setId(UUID.randomUUID().toString());
+        }
         return repository.save(goal);
     }
 
     public Goal updateGoal(String id, Goal goal) {
-        goal.setGoalId(id);
+        goal.setId(id);
         return repository.save(goal);
     }
 

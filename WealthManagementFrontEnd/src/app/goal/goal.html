@@ -1,1 +1,145 @@
-<p>goal works!</p>
+<div class="p-6">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Goals</h2>
+
+    <button 
+      pButton 
+      label="New Goal" 
+      icon="pi pi-plus" 
+      severity="success"
+      (click)="showFormDialog.set(true); form.reset(); selectedGoal.set(null)">
+    </button>
+  </div>
+
+  <!-- Goal Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div 
+      *ngFor="let goal of goals()" 
+      class="bg-white shadow-lg rounded-2xl p-5 flex flex-col justify-between">
+
+      <!-- Top Section -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">
+          {{ goal.goalName }}
+        </h3>
+
+        <p class="text-sm text-gray-500 mb-2">
+          Type: {{ goal.goalType }}
+        </p>
+
+        <p class="text-sm text-gray-500 mb-2">
+          Target: ${{ goal.targetAmount }}
+        </p>
+
+        <p class="text-sm text-gray-500 mb-2">
+          Saved: ${{ goal.currentSavedAmount }}
+        </p>
+
+        <p class="text-sm text-gray-500">
+          Date: {{ goal.goalDate }}
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-2 mt-4">
+
+        <button 
+          pButton 
+          icon="pi pi-pencil" 
+          severity="danger"
+          (click)="
+            selectedGoal.set(goal);
+            form.patchValue(goal);
+            showFormDialog.set(true)
+          ">
+        </button>
+
+        <button 
+          pButton 
+          icon="pi pi-trash" 
+          severity="danger"
+          (click)="handleDeleteGoal(goal)">
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Delete Modal -->
+  <app-delete-confirmation-modal 
+    [visible]="showDeleteDialog()"
+    [recordName]="selectedGoal()?.goalName || 'this goal'"
+    (confirmed)="deleteGoal()"
+    (cancelled)="showDeleteDialog.set(false)">
+  </app-delete-confirmation-modal>
+
+  <!-- Form Dialog -->
+  <p-dialog 
+    [visible]="showFormDialog()" 
+    (visibleChange)="showFormDialog.set($event)" 
+    header="Goal Details"
+    [modal]="true" 
+    [style]="{width: '450px'}">
+
+    <form [formGroup]="form" class="grid grid-cols-2 gap-4">
+
+      <input 
+        pInputText 
+        formControlName="goalName" 
+        placeholder="Goal Name" 
+        class="col-span-2" />
+
+      <input 
+        pInputText 
+        formControlName="targetAmount" 
+        placeholder="Target Amount" />
+
+      <input 
+        pInputText 
+        formControlName="currentSavedAmount" 
+        placeholder="Saved Amount" />
+
+      <input 
+        pInputText 
+        formControlName="goalDate" 
+        placeholder="Goal Date" 
+        class="col-span-2" />
+
+      <p-select 
+        [options]="goalType" 
+        formControlName="goalType"
+        optionLabel="label" 
+        optionValue="value"
+        placeholder="Goal Type" 
+        class="col-span-2 w-full"
+        appendTo="body">
+      </p-select>
+
+    </form>
+
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+
+      <button 
+        pButton 
+        label="Cancel" 
+        class="p-button-text"
+        (click)="showFormDialog.set(false)">
+      </button>
+
+      <button 
+        pButton 
+        label="Save" 
+        [disabled]="form.invalid"
+        (click)="saveGoal()">
+      </button>
+
+    </ng-template>
+
+  </p-dialog>
+
+</div>

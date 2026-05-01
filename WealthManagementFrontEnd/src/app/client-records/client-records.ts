@@ -32,8 +32,7 @@ export class ClientRecords implements OnInit {
   showDeleteDialog = signal<boolean>(false);
 
 
-  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder
-) {
+  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder) {
 
     
   }
