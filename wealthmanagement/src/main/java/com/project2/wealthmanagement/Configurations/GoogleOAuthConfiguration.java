@@ -46,7 +46,8 @@ public class GoogleOAuthConfiguration {
     public SecurityFilterChain devFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .csrf(csrf -> csrf.disable());
+                .csrf(csrf -> csrf.disable())
+                .oauth2Login(oauth2 -> oauth2.disable());
         return http.build();
     }
 
