@@ -52,7 +52,7 @@ public class GoogleOAuthConfiguration {
                         principal.getAttribute("family_name"), // lastName
                         principal.getAttribute("picture") // avatarUrl
                 );
-                response.sendRedirect("http://apmpwealthmanagement.eastus.cloudapp.azure.com");
+                response.sendRedirect("http://wealthmanagementportal.eastus.cloudapp.azure.com/");
             }
         };
     }
