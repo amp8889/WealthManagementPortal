@@ -22,7 +22,7 @@
 
       <!-- Top Section -->
       <div>
-        <h3 class="text-lg font-semibold mb-2">
+        <h3 class="text-lg font-semibold text-gray-500 mb-2">
           {{ goal.goalName }}
         </h3>
 
@@ -41,6 +41,8 @@
         <p class="text-sm text-gray-500">
           Date: {{ goal.goalDate }}
         </p>
+
+        <p class="text-sm text-gray-500">Client ID: {{ goal.clientId }}</p>
       </div>
 
       <!-- Actions -->
@@ -49,7 +51,7 @@
         <button 
           pButton 
           icon="pi pi-pencil" 
-          severity="danger"
+          severity="warn"
           (click)="
             selectedGoal.set(goal);
             form.patchValue(goal);
@@ -119,6 +121,17 @@
         class="col-span-2 w-full"
         appendTo="body">
       </p-select>
+
+<p-select
+  appendTo="body"
+  [options]="clients()"
+  optionLabel="firstName"
+  optionValue="id"
+  formControlName="clientId"
+  placeholder="Select Client"
+  class="w-full">
+</p-select>
+
 
     </form>
 

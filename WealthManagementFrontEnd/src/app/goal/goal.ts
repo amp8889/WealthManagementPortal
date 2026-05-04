@@ -11,7 +11,7 @@ import { Select } from 'primeng/select';
 import { DeleteConfirmationModal } from '../components/delete-confirmation-modal/delete-confirmation-modal';
 import { CommonModule } from '@angular/common';
 import { DatePicker } from 'primeng/datepicker';
-
+import { ClientRecordsService } from '../services/ClientRecords';
 
 @Component({
   selector: 'app-goal',
@@ -21,7 +21,7 @@ import { DatePicker } from 'primeng/datepicker';
 })
 export class Goal implements OnInit {
 
-
+  clients = signal<any[]>([]);
   goals = signal<GoalModel[]>([]);
   selectedGoal = signal<GoalModel | null>(null);
 
@@ -31,7 +31,7 @@ export class Goal implements OnInit {
 
 
 
-  constructor(private goalService: GoalService, private formBuilder: FormBuilder) {
+  constructor(private goalService: GoalService, private clientService: ClientRecordsService, private formBuilder: FormBuilder) {
 
 
   }
@@ -51,19 +51,23 @@ export class Goal implements OnInit {
   form!: FormGroup;
 
   ngOnInit(): void {
-    this.loadGoals();
+  this.loadGoals();
 
-    this.form = this.formBuilder.group({
-      goalName: [""],
-      targetAmount: [""],
-      goalType:[""],
-      goalDate:[""],
-      currentSavedAmount: [""],
-      id:[""]
+  this.clientService.getAll().subscribe({
+    next: (data) => {
+      this.clients.set(data);
+    },
+    error: (err) => console.error(err)
+  });
 
-
-
-    });
+  this.form = this.formBuilder.group({
+    goalName: [""],
+    targetAmount: [""],
+    goalType: [""],
+    goalDate: [""],
+    currentSavedAmount: [""],
+    clientId: [""]
+  });
 
 
 }
@@ -97,7 +101,6 @@ export class Goal implements OnInit {
 
 
     const payload: GoalModel = {
-      // clientRecordsId: "1",
       goalName,
       targetAmount,
       goalType,
@@ -107,6 +110,8 @@ export class Goal implements OnInit {
     }
 
     if(this.selectedGoal() === null){
+      console.log("FORM VALUE:", this.form.value);
+      console.log("clientId:", clientId);
       this.goalService.create(payload).subscribe({
         next: (data) => {
           this.goals.update((currentList) => [...currentList, data]);

@@ -19,7 +19,7 @@ public class DataLoader {
     @Bean
     CommandLineRunner init(ClientRecordsRepository repository){
         return args -> {
-            repository.save(new ClientRecords("1", "Aidan", "Pavlik", ClientTier.STANDARD, "USA", RiskTolerance.AGGRESSIVE, PrimaryObjective.BALANCED, List.of("1", "2")));
+            repository.save(new ClientRecords("1", "Aidan", "Pavlik", ClientTier.STANDARD, "USA", RiskTolerance.AGGRESSIVE, PrimaryObjective.BALANCED));
         };
     }
 }

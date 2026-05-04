@@ -1,8 +1,5 @@
 package com.project2.wealthmanagement.Models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -27,7 +24,6 @@ public class ClientRecords {
     private String country;
     private RiskTolerance riskTolerance;
     private PrimaryObjective primaryObjective;
-    private List<String> goalIds = new ArrayList<>();
 
 
     public ClientRecords() {
@@ -35,7 +31,7 @@ public class ClientRecords {
 
 
     public ClientRecords(String id, String firstName, String lastName, ClientTier clientTier,
-        String country, RiskTolerance riskTolerance, PrimaryObjective primaryObjective, List<String> goalIds) {
+        String country, RiskTolerance riskTolerance, PrimaryObjective primaryObjective) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,7 +39,7 @@ public class ClientRecords {
         this.country = country;
         this.riskTolerance = riskTolerance;
         this.primaryObjective = primaryObjective;
-        this.goalIds = goalIds;
+
     }
 
 
@@ -117,14 +113,6 @@ public class ClientRecords {
     }
 
 
-    public List<String> getGoalIds() {
-        return goalIds;
-    }
-
-
-    public void setGoalIds(List<String> goalIds) {
-        this.goalIds = goalIds;
-    }
 
 
     @Override
@@ -138,7 +126,6 @@ public class ClientRecords {
         result = prime * result + ((country == null) ? 0 : country.hashCode());
         result = prime * result + ((riskTolerance == null) ? 0 : riskTolerance.hashCode());
         result = prime * result + ((primaryObjective == null) ? 0 : primaryObjective.hashCode());
-        result = prime * result + ((goalIds == null) ? 0 : goalIds.hashCode());
         return result;
     }
 
@@ -178,11 +165,6 @@ public class ClientRecords {
             return false;
         if (primaryObjective != other.primaryObjective)
             return false;
-        if (goalIds == null) {
-            if (other.goalIds != null)
-                return false;
-        } else if (!goalIds.equals(other.goalIds))
-            return false;
         return true;
     }
 
@@ -191,7 +173,7 @@ public class ClientRecords {
     public String toString() {
         return "ClientRecords [id=" + id + ", firstName=" + firstName + ", lastName="
                 + lastName + ", clientTier=" + clientTier + ", country=" + country + ", riskTolerance=" + riskTolerance
-                + ", primaryObjective=" + primaryObjective + ", goalIds=" + goalIds + "]";
+                + ", primaryObjective=" + primaryObjective + "]";
     }
 
     

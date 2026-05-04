@@ -6,5 +6,4 @@ export type ClientRecord = {
   country: string;
   riskTolerance: string;
   primaryObjective: string;
-  goalIds: string[];
 }

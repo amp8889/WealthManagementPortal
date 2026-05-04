@@ -68,7 +68,6 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
       country: ["", [Validators.required]],
       riskTolerance: [""],
       primaryObjective: [""],
-      goalIds: [""]
     });
 
 
@@ -100,7 +99,7 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
       return;
     }
 
-    const {id, firstName, lastName, clientTier, country, riskTolerance, primaryObjective, goalIds} = this.form.value;
+    const {id, firstName, lastName, clientTier, country, riskTolerance, primaryObjective} = this.form.value;
     // const clientTierKey = Object.entries(ClientTier).find(([, val]) => val === clientTier)?.[0];
     // const riskToleranceKey = Object.entries(RiskTolerance).find(([, val]) => val === riskTolerance)?.[0];
     // const primaryObjectiveKey = Object.entries(PrimaryObjective).find(([, val]) => val === primaryObjective)?.[0];
@@ -112,8 +111,8 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
       clientTier,
       country,
       riskTolerance,
-      primaryObjective,
-      goalIds
+      primaryObjective
+      
     }
 
     if(this.selectedClient() === null){
