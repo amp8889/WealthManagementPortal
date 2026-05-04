@@ -18,16 +18,15 @@ resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2025-10-15' = {
   tags: tags
   kind: cosmosAccKind
   properties: {
-    locations:[
+    locations: [
       {
         locationName: location
       }
     ]
     databaseAccountOfferType: cosmosAccType
-    /*
     apiProperties: {
-      serverVersion: 
-    }*/
+      serverVersion: '7.0'
+    }
   }
 }
 
@@ -74,7 +73,49 @@ resource aks 'Microsoft.ContainerService/managedClusters@2026-01-01' = {
       }
     ]
   }
-identity: {
-type: 'SystemAssigned'
+  identity: {
+    type: 'SystemAssigned'
+  }
 }
+
+// https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+var acrPushRoleId = subscriptionResourceId(
+  'Microsoft.Authorization/roleDefinitions',
+  '8311e382-0749-4cb8-b61a-304f252e45ec'
+)
+
+// Add deployer's ACRPush to the ACR
+resource acrPushDeployer 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(acr.id, deployer().objectId, acrPushRoleId)
+  scope: acr
+  properties: {
+    roleDefinitionId: acrPushRoleId
+    principalId: deployer().objectId
+    principalType: 'User'
+  }
 }
+
+var acrPullRoleId = subscriptionResourceId(
+  'Microsoft.Authorization/roleDefinitions',
+  '7f951dda-4ed3-4680-a7ca-43fe172d538d'
+)
+
+resource acrPullAKS 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(aks.id, acr.id, acrPullRoleId)
+  scope: acr
+  properties: {
+    roleDefinitionId: acrPullRoleId
+    principalId: aks.identity.principalId
+  }
+  
+}
+
+resource acrPullAKSAgentPool 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(aks.id, acr.id, acrPullRoleId, 'agentpool')
+  scope: acr
+  properties: {
+    roleDefinitionId: acrPullRoleId
+    principalId: aks.properties.identityProfile.kubeletidentity.objectId
+  }
+}
+

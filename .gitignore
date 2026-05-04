@@ -3,3 +3,4 @@ wealthmanagement/src/main/resources/application.properties
 wealthmanagement/src/main/resources/application.yaml
 .env
 client_secrets.json
+wealthmanagement/src/main/resources/application-test.yaml
