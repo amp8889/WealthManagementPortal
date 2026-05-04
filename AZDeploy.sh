@@ -1,8 +1,8 @@
-docker build -t wealthmanagement:v2 .
-docker tag wealthmanagement:v2 apmpacr.azurecr.io/wealthmanagement:v2
+docker build -t wealthmanagement:v4 .
+docker tag wealthmanagement:v4 apmpacr.azurecr.io/wealthmanagement:v4
 
 az acr login --name apmpacr
-docker push apmpacr.azurecr.io/wealthmanagement:v2
+docker push apmpacr.azurecr.io/wealthmanagement:v4
 
 az aks get-credentials --resource-group 20260316-EY-Java --name apmp-aks --overwrite-existing
 
