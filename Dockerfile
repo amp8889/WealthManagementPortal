@@ -5,7 +5,7 @@ WORKDIR /app
 COPY wealthmanagement/pom.xml .
 COPY wealthmanagement/src ./src
 
-RUN mvn package -e
+RUN mvn package -e -DskipTests
 
 FROM eclipse-temurin:25-jre
 

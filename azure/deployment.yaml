@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: wealthmanagement
-        image: apmpacr.azurecr.io/wealthmanagement:v2
+        image: apmpacr.azurecr.io/wealthmanagement:v4
         ports:
         - containerPort: 8080
         env:
@@ -29,3 +29,17 @@ spec:
               key: MONGODB_URI
         - name: SPRING_DATA_MONGODB_DATABASE
           value: "apmp-cosmos"
+        - name: SPRING_PROFILES_ACTIVE
+          value: "test"
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: google-oauth-secret
+              key: client-id
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: google-oauth-secret
+              key: client-secret
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE
+          value: "profile,email"
