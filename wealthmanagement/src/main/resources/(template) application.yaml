@@ -1,9 +1,6 @@
 spring:
   application:
     name: wealthmanagement
-  profiles:
-    active:
-    - dev
   
   data:
     mongodb:
