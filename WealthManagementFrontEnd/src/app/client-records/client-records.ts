@@ -30,21 +30,21 @@ export class ClientRecords implements OnInit {
   clients = signal<ClientRecord[]>([]);
   selectedClient = signal<ClientRecord | null>(null);
 
- 
+
   showFormDialog = signal<boolean>(false);
   showDeleteDialog = signal<boolean>(false);
 
 
   constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder) {
 
-    
+
   }
 
 
-clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
-  label: value,  
-  value: key      
-}));
+  clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
+    label: value,
+    value: key
+  }));
 
   riskToleranceOptions = Object.entries(RiskTolerance).map(([key, value]) => ({
     label: value,
@@ -80,14 +80,14 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
 
   loadClients() {
     this.clientService.getAll().subscribe({
-      next:(data) => {
+      next: (data) => {
         this.clients.set(data);
       },
 
-      error:(err) => {
+      error: (err) => {
         console.error(err)
       }
-      
+
     });
   }
 
@@ -95,11 +95,11 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
 
 
   saveClient() {
-      if(this.form.invalid) {
+    if (this.form.invalid) {
       return;
     }
 
-    const {id, firstName, lastName, clientTier, country, riskTolerance, primaryObjective} = this.form.value;
+    const { id, firstName, lastName, clientTier, country, riskTolerance, primaryObjective } = this.form.value;
     // const clientTierKey = Object.entries(ClientTier).find(([, val]) => val === clientTier)?.[0];
     // const riskToleranceKey = Object.entries(RiskTolerance).find(([, val]) => val === riskTolerance)?.[0];
     // const primaryObjectiveKey = Object.entries(PrimaryObjective).find(([, val]) => val === primaryObjective)?.[0];
@@ -112,16 +112,16 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
       country,
       riskTolerance,
       primaryObjective
-      
+
     }
 
-    if(this.selectedClient() === null){
+    if (this.selectedClient() === null) {
       this.clientService.create(payload).subscribe({
         next: (data) => {
           this.clients.update((currentList) => [...currentList, data]);
           this.showFormDialog.set(false);
         },
-        error:(err) => {
+        error: (err) => {
           console.error(err);
           this.showFormDialog.set(false);
         }
@@ -147,7 +147,7 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
 
     console.log("SELECTED Client Record:");
     console.log(clientRecord);
-    
+
     this.selectedClient.set(clientRecord);
     // This is for pre-filling form with values that are already set
     this.form.setValue({
@@ -158,9 +158,9 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
       riskTolerance: clientRecord.riskTolerance,
       primaryObjective: clientRecord.primaryObjective
     })
-    
 
-    
+
+
     this.showFormDialog.set(true);
   }
 
@@ -175,7 +175,7 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
 
   deleteClient() {
 
-    if(this.selectedClient() === null || this.selectedClient()!.id === null) {
+    if (this.selectedClient() === null || this.selectedClient()!.id === null) {
       console.log("NO ID")
       return
     }
@@ -183,9 +183,9 @@ clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
     this.clientService.delete(this.selectedClient()!.id!).subscribe({
       next: () => {
         this.clients.update((currentList) => currentList.filter(clientRecords => clientRecords.id !== this.selectedClient()!.id));
-        this,this.showDeleteDialog.set(false);
+        this, this.showDeleteDialog.set(false);
       },
-      error: (err) =>{
+      error: (err) => {
         console.log(err)
         this.showDeleteDialog.set(false);
       }
