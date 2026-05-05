@@ -1,0 +1,114 @@
+<div class="p-6 max-w-5xl mx-auto">
+
+  
+  <h2 class="text-3xl font-bold mb-6">My Profile</h2>
+
+  
+  <div *ngIf="client()" class="bg-white shadow-md rounded-2xl p-6 mb-8">
+    <h3 class="text-xl font-semibold mb-4 text-gray-700">Client Information</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
+      <p><strong>Name:</strong> {{ client()?.firstName }} {{ client()?.lastName }}</p>
+      <p><strong>Tier:</strong> {{ client()?.clientTier }}</p>
+      <p><strong>Country:</strong> {{ client()?.country }}</p>
+      <p><strong>Risk:</strong> {{ client()?.riskTolerance }}</p>
+      <p><strong>Objective:</strong> {{ client()?.primaryObjective }}</p>
+    </div>
+  </div>
+
+  
+  <div class="bg-white shadow-md rounded-2xl p-6">
+
+    <h3 class="text-xl font-semibold mb-4 text-gray-700">My Goal</h3>
+
+    
+    <div *ngIf="!goal()" class="text-gray-500 mb-4">
+      No goal found. Please contact your advisor or create one.
+    </div>
+
+    
+    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+
+      
+      <div class="col-span-2">
+        <input 
+          pInputText 
+          formControlName="goalName" 
+          placeholder="Goal Name"
+          class="w-full" />
+      </div>
+
+      
+      <div>
+        <input 
+          pInputText 
+          formControlName="targetAmount" 
+          placeholder="Target Amount"
+          class="w-full" />
+      </div>
+
+     
+      <div>
+        <input 
+          pInputText 
+          formControlName="currentSavedAmount" 
+          placeholder="Saved Amount"
+          class="w-full" />
+      </div>
+
+      
+      <div class="col-span-2">
+<p-datepicker
+  ngSkipHydration
+  formControlName="goalDate"
+  dateFormat="yy-mm-dd"
+  showIcon="true"
+  appendTo="body"
+  class="w-full">
+</p-datepicker>
+      </div>
+
+      
+      <div class="col-span-2" *ngIf="goal()">
+        <p class="text-sm text-gray-600 mb-1">
+          Progress:
+          {{
+            (form.value.currentSavedAmount || 0) /
+            (form.value.targetAmount || 1) * 100
+              | number:'1.0-0'
+          }}%
+        </p>
+
+        <p-progressBar
+          [value]="
+            (form.value.currentSavedAmount || 0) /
+            (form.value.targetAmount || 1) * 100
+          ">
+        </p-progressBar>
+      </div>
+
+      
+      <div class="col-span-2 flex justify-end gap-2 mt-4">
+
+        <button 
+          pButton 
+          label="Reset"
+          severity="secondary"
+          (click)="goal() && form.patchValue(goal()!)" type="button">
+        </button>
+
+        <button 
+          pButton 
+          label="Update Goal"
+          icon="pi pi-save"
+          [disabled]="form.invalid || !goal()"
+          (click)="saveGoal()">
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
