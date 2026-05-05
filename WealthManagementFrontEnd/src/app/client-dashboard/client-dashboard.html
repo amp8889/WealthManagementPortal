@@ -1,0 +1,78 @@
+<div class="p-6 max-w-4xl mx-auto">
+
+
+  <h2 class="text-3xl font-bold mb-6">My Dashboard</h2>
+
+
+  <div *ngIf="client()" class="bg-white shadow-md rounded-2xl p-6 mb-8">
+    <h3 class="text-xl font-semibold mb-4 text-gray-700">My Information</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
+      <p><strong>Name:</strong> {{ client()?.firstName }} {{ client()?.lastName }}</p>
+      <p><strong>Tier:</strong> {{ client()?.clientTier }}</p>
+      <p><strong>Country:</strong> {{ client()?.country }}</p>
+      <p><strong>Risk:</strong> {{ client()?.riskTolerance }}</p>
+      <p><strong>Objective:</strong> {{ client()?.primaryObjective }}</p>
+    </div>
+  </div>
+
+
+  <div class="bg-white shadow-md rounded-2xl p-6">
+
+    <h3 class="text-xl font-semibold mb-4 text-gray-700">My Goal</h3>
+
+    <div *ngIf="goal(); else noGoal">
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600 mb-6">
+        <p><strong>Goal Name:</strong> {{ goal()?.goalName }}</p>
+        <p><strong>Type:</strong> {{ goal()?.goalType }}</p>
+        <p><strong>Target Amount:</strong> ${{ goal()?.targetAmount }}</p>
+        <p><strong>Target Date:</strong> {{ goal()?.goalDate }}</p>
+      </div>
+
+
+      <form [formGroup]="form" class="flex flex-col gap-4 max-w-sm">
+
+        <label class="text-sm font-medium text-gray-600">
+          Update Saved Amount
+        </label>
+
+        <input pInputText formControlName="currentSavedAmount" placeholder="Enter amount saved" class="w-full" />
+
+
+        <div>
+          <p class="text-sm text-gray-600 mb-1">
+            Progress:
+            {{
+            (form.value.currentSavedAmount || 0) /
+            (goal()?.targetAmount || 1) * 100
+            | number:'1.0-0'
+            }}%
+          </p>
+
+          <p-progressBar [value]="
+              (form.value.currentSavedAmount || 0) /
+              (goal()?.targetAmount || 1) * 100
+            ">
+          </p-progressBar>
+        </div>
+
+
+        <button pButton label="Update Progress" icon="pi pi-save" (click)="saveGoal()" [disabled]="form.invalid">
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <ng-template #noGoal>
+      <p class="text-gray-500">
+        No goal assigned yet. Please contact your advisor.
+      </p>
+    </ng-template>
+
+  </div>
+
+</div>
