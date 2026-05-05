@@ -8,7 +8,7 @@ export const routes: Routes = [
     { path: "client-records", component: ClientRecords },
     {path: "goal", component: Goal},
     {path: "home", component: Home},
-    {path: "", redirectTo: "movies", pathMatch: 'full'}
+    {path: "", redirectTo: "home", pathMatch: 'full'}
 
 
 ];

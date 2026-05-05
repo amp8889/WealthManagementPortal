@@ -2,9 +2,9 @@ package com.project2.wealthmanagement.Models;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Id;
 
 @Document(collection = "advisorinfo")
 public class AdvisorInfo {

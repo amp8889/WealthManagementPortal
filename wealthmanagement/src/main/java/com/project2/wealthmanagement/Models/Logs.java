@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.project2.wealthmanagement.Enums.DeliveryFormat;
 import com.project2.wealthmanagement.Enums.LogInteractionType;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 @Document(collation = "logs")
 public class Logs {

@@ -43,3 +43,5 @@ spec:
               key: client-secret
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE
           value: "profile,email"
+        - name: SPRING_AUTOCONFIGURE_EXCLUDE
+          value: ""
