@@ -12,10 +12,11 @@ import { DeleteConfirmationModal } from '../components/delete-confirmation-modal
 import { CommonModule } from '@angular/common';
 import { DatePicker } from 'primeng/datepicker';
 import { ClientRecordsService } from '../services/ClientRecords';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
   selector: 'app-goal',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, CommonModule, DatePicker],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, CommonModule, DatePicker, ProgressBarModule],
   templateUrl: './goal.html',
   styleUrl: './goal.css',
 })
