@@ -9,7 +9,6 @@ import { ClientRecordsService } from '../services/ClientRecords';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { DatePicker } from 'primeng/datepicker';
 import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
@@ -20,7 +19,6 @@ import { ProgressBarModule } from 'primeng/progressbar';
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
-    DatePicker,
     ProgressBarModule,
 
   ],
