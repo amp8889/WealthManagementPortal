@@ -1,6 +1,6 @@
 <div class="p-6">
 
-  <!-- Header -->
+  
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold">Goals</h2>
 
@@ -13,14 +13,14 @@
     </button>
   </div>
 
-  <!-- Goal Cards -->
+  
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <div 
       *ngFor="let goal of goals()" 
       class="bg-white shadow-lg rounded-2xl p-5 flex flex-col justify-between">
 
-      <!-- Top Section -->
+      
       <div>
         <h3 class="text-lg font-semibold text-gray-500 mb-2">
           {{ goal.goalName }}
@@ -45,7 +45,7 @@
         <p class="text-sm text-gray-500">Client ID: {{ goal.clientId }}</p>
       </div>
 
-      <!-- Actions -->
+      
       <div class="flex justify-end gap-2 mt-4">
 
         <button 
@@ -71,7 +71,7 @@
 
   </div>
 
-  <!-- Delete Modal -->
+  
   <app-delete-confirmation-modal 
     [visible]="showDeleteDialog()"
     [recordName]="selectedGoal()?.goalName || 'this goal'"
@@ -79,7 +79,7 @@
     (cancelled)="showDeleteDialog.set(false)">
   </app-delete-confirmation-modal>
 
-  <!-- Form Dialog -->
+ 
   <p-dialog 
     [visible]="showFormDialog()" 
     (visibleChange)="showFormDialog.set($event)" 
@@ -135,7 +135,7 @@
 
     </form>
 
-    <!-- Footer -->
+    
     <ng-template pTemplate="footer">
 
       <button 
