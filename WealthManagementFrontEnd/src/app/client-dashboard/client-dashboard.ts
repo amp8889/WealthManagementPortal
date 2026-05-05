@@ -32,7 +32,7 @@ export class ClientDashboard implements OnInit {
 
 
   //This will need to be replaced when we get auth fully working with frontend
-  clientId = "some-client-id";
+  clientId = "fa26bfc7-76fc-49d0-b99d-681f64a3438b";
 
   form!: FormGroup;
 
@@ -40,15 +40,13 @@ export class ClientDashboard implements OnInit {
     private goalService: GoalService,
     private clientService: ClientRecordsService,
     private formBuilder: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
     this.form = this.formBuilder.group({
-      goalName: [''],
-      targetAmount: [''],
       currentSavedAmount: [''],
-      goalDate: ['']
+
     });
 
     this.loadClient();
@@ -69,46 +67,33 @@ export class ClientDashboard implements OnInit {
   }
 
   loadGoal() {
-    this.goalService.getById(this.clientId).subscribe({
-      next: (data) => {
-        this.goal.set(data);
+    this.goalService.getAll().subscribe(goals => {
+      const goal = goals.find(g => g.clientId === this.clientId);
 
-        if (data) {
-          this.form.patchValue({
-            ...data,
-            goalDate: data.goalDate ? new Date(data.goalDate) : null
-          });
-        }
-      },
-      error: (err) => console.error(err)
+      if (goal) {
+        this.goal.set(goal);
+        this.form.patchValue({
+          currentSavedAmount: goal.currentSavedAmount
+        });
+      }
     });
   }
 
-  saveGoal() {
-    if (this.form.invalid || !this.goal()) return;
+saveGoal() {
+  const goal = this.goal();
 
-    const formValue = this.form.value;
+  if (this.form.invalid || !goal) return;
 
-    const updatedGoal: Goal = {
-      ...this.goal()!,
-      goalName: formValue.goalName,
-      targetAmount: Number(formValue.targetAmount),
-      currentSavedAmount: Number(formValue.currentSavedAmount),
-      goalType: this.goal()!.goalType, 
-      clientId: this.clientId,
+  const updatedGoal = {
+    ...goal,
+    currentSavedAmount: this.form.value.currentSavedAmount
+  };
 
-      goalDate: formValue.goalDate
-        ? new Date(formValue.goalDate).toISOString().split('T')[0]
-        : null
-    };
-
-    this.goalService.update(updatedGoal.id!, updatedGoal).subscribe({
-      next: (res) => {
-        this.goal.set(res);
-        console.log("Updated goal:", res);
-      },
-      error: (err) => console.error(err)
-    });
-  }
+  this.goalService.update(goal.id!, updatedGoal).subscribe({
+    next: (res) => {
+      this.goal.set(res);
+    }
+  });
+}
 
 }
