@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -15,6 +15,7 @@ import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -29,11 +30,15 @@ import { MessageService } from 'primeng/api';
     TagModule,
     ToastModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, Router],
   templateUrl: './client-dashboard.html',
   styleUrl: './client-dashboard.css',
 })
 export class ClientDashboard implements OnInit {
+
+  private route = inject(ActivatedRoute);  // move out of constructor
+
+
 
   client = signal<ClientRecord | null>(null);
   goals = signal<Goal[]>([]);
@@ -47,17 +52,19 @@ export class ClientDashboard implements OnInit {
     private goalService: GoalService,
     private clientService: ClientRecordsService,
     private formBuilder: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+
   ) {}
 
-  ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      goals: this.formBuilder.array([])
-    });
+ngOnInit(): void {
+  this.form = this.formBuilder.group({
+    goals: this.formBuilder.array([])
+  });
 
-    this.loadClient();
-    this.loadGoals();
-  }
+  this.clientId = this.route.snapshot.paramMap.get('clientId') ?? '';
+  this.loadClient();
+  this.loadGoals();
+}
 
   loadClient() {
     this.clientService.getById(this.clientId).subscribe({

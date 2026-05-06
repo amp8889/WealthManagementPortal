@@ -15,6 +15,7 @@ import { DeleteConfirmationModal } from '../components/delete-confirmation-modal
 import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { GoalService } from '../services/GoalService';
+import { Router } from '@angular/router';
 
 
 
@@ -37,7 +38,7 @@ export class ClientRecords implements OnInit {
   showDeleteDialog = signal<boolean>(false);
 
 
-  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder, private goalService: GoalService) {
+  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder, private goalService: GoalService, private router: Router) {
 
 
   }
@@ -96,7 +97,9 @@ export class ClientRecords implements OnInit {
   }
 
 
-
+viewClientDashboard(clientId: string) {
+  this.router.navigate(['/dashboard', clientId]);
+}
 
 
 
@@ -188,7 +191,6 @@ getGoalCount(clientId: string): number {
     console.log(clientRecord);
 
     this.selectedClient.set(clientRecord);
-    // This is for pre-filling form with values that are already set
     this.form.setValue({
       firstName: clientRecord.firstName,
       lastName: clientRecord.lastName,
