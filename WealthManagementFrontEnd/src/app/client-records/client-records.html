@@ -2,22 +2,55 @@
 
 
   <div class="flex justify-between items-center mb-4">
+    <div class="mb-4 flex justify-end">
+      <input pInputText type="text" placeholder="Search clients..."
+        (input)="table.filterGlobal($event.target.value, 'contains')" class="w-64" />
+    </div>
+
     <h2 class="text-2xl font-bold">Client Records</h2>
+
+
+
+
     <button pButton label="New Client" icon="pi pi-plus" class="p-button-success"
       (click)="showFormDialog.set(true); form.reset(); selectedClient.set(null)">
     </button>
+
   </div>
 
 
-  <p-table [value]="clients()" class="shadow-lg rounded-lg">
+
+
+
+
+
+  <p-table #table [value]="clients()" [paginator]="true" [rows]="10"
+    [globalFilterFields]="['firstName','lastName','clientTier','riskTolerance']" class="shadow-lg rounded-lg">
     <ng-template pTemplate="header">
       <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Tier</th>
-        <th>Risk</th>
-       
-        <th>Goals</th>
+        <th pSortableColumn="firstName">
+          First Name
+          <p-sortIcon field="firstName"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="lastName">
+          Last Name
+          <p-sortIcon field="lastName"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="clientTier">
+          Tier
+          <p-sortIcon field="clientTier"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="riskTolerance">
+          Risk
+          <p-sortIcon field="riskTolerance"></p-sortIcon>
+        </th>
+
+        <th>
+          Goals
+        </th>
         <th>Actions</th>
       </tr>
     </ng-template>
