@@ -1,66 +1,139 @@
-<div class="p-6 max-w-4xl mx-auto">
+<p-toast position="top-right" />
 
-  <h2 class="text-3xl font-bold mb-6">My Dashboard</h2>
+<div class="p-6 max-w-5xl mx-auto">
 
-  
-  <div *ngIf="client()" class="bg-white shadow-md rounded-2xl p-6 mb-8">
-    <h3 class="text-xl font-semibold mb-4 text-gray-700">My Information</h3>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
-      <p><strong>Name:</strong> {{ client()?.firstName }} {{ client()?.lastName }}</p>
-      <p><strong>Tier:</strong> {{ client()?.clientTier }}</p>
-      <p><strong>Country:</strong> {{ client()?.country }}</p>
-      <p><strong>Risk:</strong> {{ client()?.riskTolerance }}</p>
-      <p><strong>Objective:</strong> {{ client()?.primaryObjective }}</p>
-    </div>
+ 
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800">My Dashboard</h2>
+    <p class="text-gray-400 mt-1">Track your financial goals and personal information</p>
   </div>
 
   
-  <div class="bg-white shadow-md rounded-2xl p-6">
+  <div *ngIf="client()" class="bg-white shadow-md rounded-2xl p-6 mb-8 border border-gray-100">
 
-    <h3 class="text-xl font-semibold mb-4 text-gray-700">My Goals</h3>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="bg-blue-100 text-blue-600 rounded-full p-3">
+        <i class="pi pi-user text-xl"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800">
+          {{ client()?.firstName }} {{ client()?.lastName }}
+        </h3>
+        <p class="text-sm text-gray-400">Client Profile</p>
+      </div>
+    </div>
 
-    <div *ngFor="let goal of goals(); let i = index" class="mb-8 border-b pb-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600 mb-4">
-        <p><strong>Name:</strong> {{ goal.goalName }}</p>
-        <p><strong>Type:</strong> {{ goal.goalType }}</p>
-        <p><strong>Target:</strong> ${{ goal.targetAmount }}</p>
-        <p><strong>Date:</strong> {{ goal.goalDate }}</p>
+      <div class="bg-gray-50 rounded-xl p-4">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tier</p>
+        <p-tag [value]="client()?.clientTier ?? ''" severity="info" />
       </div>
 
-<div [formGroup]="getGoalGroup(i)" class="flex flex-col gap-4 max-w-sm">
-        <input
-          pInputText
-          formControlName="currentSavedAmount"
-          placeholder="Enter amount saved"
-          class="w-full"
-        />
+      <div class="bg-gray-50 rounded-xl p-4">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Country</p>
+        <p class="font-medium text-gray-700">{{ client()?.country }}</p>
+      </div>
 
-        <p class="text-sm text-gray-600">
-          Progress:
-          {{
-            (formArray.at(i).value.currentSavedAmount || 0) /
-            (goal.targetAmount || 1) * 100
-            | number:'1.0-0'
-          }}%
-        </p>
+      <div class="bg-gray-50 rounded-xl p-4">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Risk Tolerance</p>
+        <p-tag
+          [value]="client()?.riskTolerance ?? ''"
+          [severity]="client()?.riskTolerance === 'AGGRESSIVE' ? 'danger' : client()?.riskTolerance === 'MODERATE' ? 'warn' : 'success'" />
+      </div>
 
+      <div class="bg-gray-50 rounded-xl p-4">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Objective</p>
+        <p class="font-medium text-gray-700">{{ client()?.primaryObjective }}</p>
+      </div>
+
+    </div>
+  </div>
+
+ 
+  <div class="bg-white shadow-md rounded-2xl p-6 border border-gray-100">
+
+    <div class="flex items-center gap-3 mb-6">
+      <div class="bg-green-100 text-green-600 rounded-full p-3">
+        <i class="pi pi-flag text-xl"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800">My Goals</h3>
+        <p class="text-sm text-gray-400">{{ goals().length }} active goal(s)</p>
+      </div>
+    </div>
+
+    <div
+      *ngFor="let goal of goals(); let i = index"
+      class="mb-6 last:mb-0 bg-gray-50 rounded-xl p-5 border border-gray-100">
+
+     
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h4 class="text-lg font-semibold text-gray-800">{{ goal.goalName }}</h4>
+          <p class="text-sm text-gray-400">Due {{ goal.goalDate }}</p>
+        </div>
+        <p-tag [value]="goal.goalType" severity="secondary" />
+      </div>
+
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
+
+        <div class="bg-white rounded-lg p-3 border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Target</p>
+          <p class="font-semibold text-gray-700">${{ goal.targetAmount | number }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg p-3 border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Saved</p>
+          <p class="font-semibold text-gray-700">${{ goal.currentSavedAmount | number }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg p-3 border border-gray-100">
+          <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Remaining</p>
+          <p class="font-semibold text-gray-700">
+            ${{ (goal.targetAmount - goal.currentSavedAmount) | number }}
+          </p>
+        </div>
+
+      </div>
+
+      
+      <div class="mb-5">
+        <div class="flex justify-between text-sm text-gray-500 mb-1">
+          <span>Progress</span>
+          <span>{{ getProgress(i, goal.targetAmount) | number:'1.0-0' }}%</span>
+        </div>
         <p-progressBar
-          [value]="
-            (formArray.at(i).value.currentSavedAmount || 0) /
-            (goal.targetAmount || 1) * 100
-          ">
-        </p-progressBar>
+          [value]="getProgress(i, goal.targetAmount)"
+          [showValue]="false"
+          styleClass="h-3 rounded-full" />
+      </div>
 
+      
+      <div [formGroup]="getGoalGroup(i)" class="flex gap-3 items-start">
+        <div class="flex flex-col gap-1 flex-1">
+          <input
+            pInputText
+            formControlName="currentSavedAmount"
+            placeholder="Update saved amount"
+            class="w-full" />
+        </div>
         <button
           pButton
           label="Update"
           icon="pi pi-save"
+          [loading]="savingIndex() === i"
           (click)="updateGoal(i)">
         </button>
-
       </div>
+
+    </div>
+
+    
+    <div *ngIf="goals().length === 0" class="text-center py-12 text-gray-400">
+      <i class="pi pi-inbox text-4xl mb-3 block"></i>
+      <p>No goals yet.</p>
     </div>
 
   </div>
