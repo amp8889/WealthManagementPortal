@@ -4,11 +4,8 @@ public enum UserRole {
 
     ADVISOR("Advisor"),
     AUDITOR("Auditor"),
-    CLIENT("Client");
-
-
-
-
+    CLIENT("Client"),
+    UNREGISTERED("Unregistered");
 
     private final String displayName;
 
