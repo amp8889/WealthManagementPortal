@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AdvisorInfo {
 
     @Id
-    private String relatedId;
+    private String advisorId;
     private String userId;
     private String specialization;
     List<String> assignedClientIds;
@@ -18,19 +18,19 @@ public class AdvisorInfo {
     public AdvisorInfo() {
     }
 
-    public AdvisorInfo(String relatedId, String userId, String specialization, List<String> assignedClientIds) {
-        this.relatedId = relatedId;
+    public AdvisorInfo(String advisorId, String userId, String specialization, List<String> assignedClientIds) {
+        this.advisorId = advisorId;
         this.userId = userId;
         this.specialization = specialization;
         this.assignedClientIds = assignedClientIds;
     }
 
-    public String getRelatedId() {
-        return relatedId;
+    public String getAdvisorId() {
+        return advisorId;
     }
 
-    public void setRelatedId(String relatedId) {
-        this.relatedId = relatedId;
+    public void setAdvisorId(String advisorId) {
+        this.advisorId = advisorId;
     }
 
     public String getUserId() {
@@ -61,7 +61,7 @@ public class AdvisorInfo {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((relatedId == null) ? 0 : relatedId.hashCode());
+        result = prime * result + ((advisorId == null) ? 0 : advisorId.hashCode());
         result = prime * result + ((userId == null) ? 0 : userId.hashCode());
         result = prime * result + ((specialization == null) ? 0 : specialization.hashCode());
         result = prime * result + ((assignedClientIds == null) ? 0 : assignedClientIds.hashCode());
@@ -77,10 +77,10 @@ public class AdvisorInfo {
         if (getClass() != obj.getClass())
             return false;
         AdvisorInfo other = (AdvisorInfo) obj;
-        if (relatedId == null) {
-            if (other.relatedId != null)
+        if (advisorId == null) {
+            if (other.advisorId != null)
                 return false;
-        } else if (!relatedId.equals(other.relatedId))
+        } else if (!advisorId.equals(other.advisorId))
             return false;
         if (userId == null) {
             if (other.userId != null)
@@ -102,7 +102,7 @@ public class AdvisorInfo {
 
     @Override
     public String toString() {
-        return "AdvisorInfo [relatedId=" + relatedId + ", userId=" + userId + ", specialization=" + specialization
+        return "AdvisorInfo [advisorId=" + advisorId + ", userId=" + userId + ", specialization=" + specialization
                 + ", assignedClientIds=" + assignedClientIds + "]";
     }
 

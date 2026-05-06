@@ -40,10 +40,10 @@ public class AdvisorInfoController {
         return ResponseEntity.ok(updatedAdvisor);
     }
 
-    // GET advisor by relatedId
-    @GetMapping("/{relatedId}") 
-    public ResponseEntity<AdvisorInfo> getAdvisorById(@PathVariable String relatedId) {
-        AdvisorInfo advisor = advisorInfoService.getAdvisorById(relatedId);
+    // GET advisor by advisorId
+    @GetMapping("/{advisorId}") 
+    public ResponseEntity<AdvisorInfo> getAdvisorById(@PathVariable String advisorId) {
+        AdvisorInfo advisor = advisorInfoService.getAdvisorById(advisorId);
         return ResponseEntity.ok(advisor);
     }
     
@@ -68,24 +68,24 @@ public class AdvisorInfoController {
         return ResponseEntity.ok(advisors);
     }
     
-    // DELETE advisor by relatedId
-    @DeleteMapping("/{relatedId}")
-    public ResponseEntity<Void> deleteAdvisor(@PathVariable String relatedId) {
-        advisorInfoService.deleteAdvisor(relatedId);
+    // DELETE advisor by advisorId
+    @DeleteMapping("/{advisorId}")
+    public ResponseEntity<Void> deleteAdvisor(@PathVariable String advisorId) {
+        advisorInfoService.deleteAdvisor(advisorId);
         return ResponseEntity.noContent().build();
     }
     
     // POST add client to advisor
-    @PostMapping("/{relatedId}/clients/{clientId}")
-    public ResponseEntity<Void> assignClientToAdvisor(@PathVariable String relatedId, @PathVariable String clientId) {
-        advisorInfoService.assignClientToAdvisor(relatedId, clientId);
+    @PostMapping("/{advisorId}/clients/{clientId}")
+    public ResponseEntity<Void> assignClientToAdvisor(@PathVariable String advisorId, @PathVariable String clientId) {
+        advisorInfoService.assignClientToAdvisor(advisorId, clientId);
         return ResponseEntity.ok().build();
     }
     
     // DELETE client from advisor
-    @DeleteMapping("/{relatedId}/clients/{clientId}")
-    public ResponseEntity<Void> removeClientFromAdvisor(@PathVariable String relatedId, @PathVariable String clientId) {
-        advisorInfoService.removeClientFromAdvisor(relatedId, clientId);
+    @DeleteMapping("/{advisorId}/clients/{clientId}")
+    public ResponseEntity<Void> removeClientFromAdvisor(@PathVariable String advisorId, @PathVariable String clientId) {
+        advisorInfoService.removeClientFromAdvisor(advisorId, clientId);
         return ResponseEntity.noContent().build();
     }
 }
