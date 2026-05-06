@@ -11,7 +11,7 @@ public class User {
     @Id
     private String googleId;
     private UserRole role;
-    private String advisorId; // Only if role is advisor
+    private String relatedId;
     private String firstName;
     private String lastName;
     private String email;
@@ -20,11 +20,11 @@ public class User {
     public User() {
     }
 
-    public User(String googleId, UserRole role, String advisorId, String firstName, String lastName, String email,
+    public User(String googleId, UserRole role, String relatedId, String firstName, String lastName, String email,
             String avatarUrl) {
         this.googleId = googleId;
         this.role = role;
-        this.advisorId = advisorId;
+        this.relatedId = relatedId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -47,12 +47,12 @@ public class User {
         this.role = role;
     }
 
-    public String getAdvisorId() {
-        return advisorId;
+    public String getRelatedId() {
+        return relatedId;
     }
 
-    public void setAdvisorId(String advisorId) {
-        this.advisorId = advisorId;
+    public void setRelatedId(String relatedId) {
+        this.relatedId = relatedId;
     }
 
     public String getFirstName() {
@@ -93,7 +93,7 @@ public class User {
         int result = 1;
         result = prime * result + ((googleId == null) ? 0 : googleId.hashCode());
         result = prime * result + ((role == null) ? 0 : role.hashCode());
-        result = prime * result + ((advisorId == null) ? 0 : advisorId.hashCode());
+        result = prime * result + ((relatedId == null) ? 0 : relatedId.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
@@ -117,10 +117,10 @@ public class User {
             return false;
         if (role != other.role)
             return false;
-        if (advisorId == null) {
-            if (other.advisorId != null)
+        if (relatedId == null) {
+            if (other.relatedId != null)
                 return false;
-        } else if (!advisorId.equals(other.advisorId))
+        } else if (!relatedId.equals(other.relatedId))
             return false;
         if (firstName == null) {
             if (other.firstName != null)
@@ -147,7 +147,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [googleId=" + googleId + ", role=" + role + ", advisorId=" + advisorId + ", firstName=" + firstName
+        return "User [googleId=" + googleId + ", role=" + role + ", relatedId=" + relatedId + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", email=" + email + ", avatarUrl=" + avatarUrl + "]";
     }
     

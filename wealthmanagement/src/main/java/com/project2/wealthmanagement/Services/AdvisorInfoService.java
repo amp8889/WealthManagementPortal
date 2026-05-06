@@ -20,9 +20,9 @@ public class AdvisorInfoService {
         return advisorInfoRepository.save(advisor);
     }
 
-    // GET advisor by advisorId
-    public AdvisorInfo getAdvisorById(String advisorId) {
-        Optional<AdvisorInfo> optional = advisorInfoRepository.findById(advisorId);
+    // GET advisor by relatedId
+    public AdvisorInfo getAdvisorById(String relatedId) {
+        Optional<AdvisorInfo> optional = advisorInfoRepository.findById(relatedId);
 
         if (optional.isPresent()) {
             return optional.get();
@@ -55,13 +55,13 @@ public class AdvisorInfoService {
     }
 
     // DELETE advisor
-    public void deleteAdvisor(String advisorId) {
-        advisorInfoRepository.deleteById(advisorId);
+    public void deleteAdvisor(String relatedId) {
+        advisorInfoRepository.deleteById(relatedId);
     }
 
     // PUT client to advisor
-    public void assignClientToAdvisor(String advisorId, String clientId) {
-        AdvisorInfo advisor = getAdvisorById(advisorId);
+    public void assignClientToAdvisor(String relatedId, String clientId) {
+        AdvisorInfo advisor = getAdvisorById(relatedId);
         List<String> clients = advisor.getAssignedClientIds();
         if (!clients.contains(clientId)) {
             clients.add(clientId);
@@ -71,8 +71,8 @@ public class AdvisorInfoService {
     }
 
     // PUT remove client
-    public void removeClientFromAdvisor(String advisorId, String clientId) {
-        AdvisorInfo advisor = getAdvisorById(advisorId);
+    public void removeClientFromAdvisor(String relatedId, String clientId) {
+        AdvisorInfo advisor = getAdvisorById(relatedId);
         List<String> clients = advisor.getAssignedClientIds();
         clients.remove(clientId);
         advisor.setAssignedClientIds(clients);
