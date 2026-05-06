@@ -16,8 +16,9 @@
         <th>Last Name</th>
         <th>Tier</th>
         <th>Risk</th>
+       
+        <th>Goals</th>
         <th>Actions</th>
-
       </tr>
     </ng-template>
 
@@ -27,6 +28,7 @@
         <td>{{ client.lastName }}</td>
         <td>{{ client.clientTier }}</td>
         <td>{{client.riskTolerance}}</td>
+        <td>{{getGoalCount(client.id)}}</td>
         <td class="flex gap-2">
 
 
