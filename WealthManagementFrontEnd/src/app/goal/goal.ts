@@ -122,6 +122,12 @@ export class Goal implements OnInit {
     });
   }
 
+getClientName(clientId: string): string {
+  const client = this.clients().find(c => c.id === clientId);
+  return client ? `${client.firstName} ${client.lastName}` : '—';
+}
+
+
 
   saveGoal() {
     if (this.form.invalid) {

@@ -3,222 +3,215 @@
   
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold">Goals</h2>
-
-    <button 
-      pButton 
-      label="New Goal" 
-      icon="pi pi-plus" 
-      severity="success"
+    <button
+      pButton
+      label="New Goal"
+      icon="pi pi-plus"
       (click)="showFormDialog.set(true); form.reset(); selectedGoal.set(null)">
     </button>
   </div>
 
   
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <p-table
+    [value]="goals()"
+    [sortField]="'goalDate'"
+    [sortOrder]="1"
+    styleClass="p-datatable-striped p-datatable-gridlines"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 25]"
+    [tableStyle]="{'min-width': '50rem'}">
 
-    <div 
-      *ngFor="let goal of goals()" 
-      class="bg-white shadow-lg rounded-2xl p-5 flex flex-col justify-between">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="clientId" class="w-1/4">
+          Client Name <p-sortIcon field="clientId" />
+        </th>
+        <th pSortableColumn="goalType" class="w-1/4">
+          Goal Type <p-sortIcon field="goalType" />
+        </th>
+        <th pSortableColumn="goalDate" class="w-1/4">
+          Goal Date <p-sortIcon field="goalDate" />
+        </th>
+        <th class="w-1/4">
+          Progress
+        </th>
+        <th class="w-24 text-center">Actions</th>
+      </tr>
+    </ng-template>
 
-      
-      <div>
-        <h3 class="text-lg font-semibold text-gray-500 mb-2">
-          {{ goal.goalName }}
-        </h3>
+    <ng-template pTemplate="body" let-goal>
+      <tr>
+<td>{{ getClientName(goal.clientId) }}</td>
+        <td>{{ goal.goalType }}</td>
+        <td>{{ goal.goalDate }}</td>
+        <td>
+          <div class="flex flex-col gap-1">
+            <span class="text-xs text-gray-500">
+              {{ (goal.currentSavedAmount / goal.targetAmount) * 100 | number:'1.0-0' }}%
+            </span>
+            <p-progressBar
+              [value]="(goal.currentSavedAmount / goal.targetAmount) * 100"
+              [showValue]="false"
+              styleClass="h-2">
+            </p-progressBar>
+          </div>
+        </td>
+        <td>
+          <div class="flex justify-center gap-2">
+            <button
+              pButton
+              icon="pi pi-pencil"
+              severity="warn"
+              size="small"
+              (click)="selectedGoal.set(goal); form.patchValue(goal); showFormDialog.set(true)">
+            </button>
+            <button
+              pButton
+              icon="pi pi-trash"
+              severity="danger"
+              size="small"
+              (click)="handleDeleteGoal(goal)">
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
 
-        <p class="text-sm text-gray-500 mb-2">
-          Type: {{ goal.goalType }}
-        </p>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center text-gray-400 py-8">
+          No goals found. Click <strong>New Goal</strong> to get started.
+        </td>
+      </tr>
+    </ng-template>
 
-        <p class="text-sm text-gray-500 mb-2">
-          Target: ${{ goal.targetAmount }}
-        </p>
-
-        <p class="text-sm text-gray-500 mb-2">
-          Saved: ${{ goal.currentSavedAmount }}
-        </p>
-
-        <p class="text-sm text-gray-500">
-          Date: {{ goal.goalDate }}
-        </p>
-
-        <p class="text-sm text-gray-500">Client ID: {{ goal.clientId }}</p>
-      </div>
-
-  <div class="mb-3">
-    <p class="text-xs text-gray-500 mb-1">
-      Progress:
-      {{
-        (goal.currentSavedAmount / goal.targetAmount) * 100
-        | number:'1.0-0'
-      }}%
-    </p>
-
-    <p-progressBar
-      [value]="(goal.currentSavedAmount / goal.targetAmount) * 100">
-    </p-progressBar>
-  </div>
-
-
-
-
-      
-      <div class="flex justify-end gap-2 mt-4">
-
-        <button 
-          pButton 
-          icon="pi pi-pencil" 
-          severity="warn"
-          (click)="
-            selectedGoal.set(goal);
-            form.patchValue(goal);
-            showFormDialog.set(true)
-          ">
-        </button>
-
-        <button 
-          pButton 
-          icon="pi pi-trash" 
-          severity="danger"
-          (click)="handleDeleteGoal(goal)">
-        </button>
-
-      </div>
-    </div>
-
-  </div>
+  </p-table>
 
   
-  <app-delete-confirmation-modal 
+  <app-delete-confirmation-modal
     [visible]="showDeleteDialog()"
     [recordName]="selectedGoal()?.goalName || 'this goal'"
     (confirmed)="deleteGoal()"
     (cancelled)="showDeleteDialog.set(false)">
   </app-delete-confirmation-modal>
 
- 
-<p-dialog 
-  [visible]="showFormDialog()" 
-  (visibleChange)="showFormDialog.set($event)" 
-  header="Goal Details"
-  [modal]="true" 
-  [style]="{width: '450px'}">
+  
+  <p-dialog
+    [visible]="showFormDialog()"
+    (visibleChange)="showFormDialog.set($event)"
+    header="Goal Details"
+    [modal]="true"
+    [style]="{width: '450px'}">
 
-  <form [formGroup]="form" class="grid grid-cols-2 gap-4">
+    <form [formGroup]="form" class="grid grid-cols-2 gap-4">
 
-    
-    <div class="col-span-2 flex flex-col gap-1">
-      <input 
-        pInputText 
-        formControlName="goalName" 
-        placeholder="Goal Name"
-        [class.ng-invalid]="form.get('goalName')?.invalid && form.get('goalName')?.touched"
-        class="w-full" />
-      <ng-container *ngIf="form.get('goalName')?.touched">
-        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('required')">Goal name is required.</small>
-        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('minlength')">Must be at least 3 characters.</small>
-        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('maxlength')">Cannot exceed 100 characters.</small>
-        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('pattern')">Only letters, numbers, spaces, hyphens and apostrophes allowed.</small>
-      </ng-container>
-    </div>
+      <div class="col-span-2 flex flex-col gap-1">
+        <input
+          pInputText
+          formControlName="goalName"
+          placeholder="Goal Name"
+          [class.ng-invalid]="form.get('goalName')?.invalid && form.get('goalName')?.touched"
+          class="w-full" />
+        <ng-container *ngIf="form.get('goalName')?.touched">
+          <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('required')">Goal name is required.</small>
+          <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('minlength')">Must be at least 3 characters.</small>
+          <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('maxlength')">Cannot exceed 100 characters.</small>
+          <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('pattern')">Only letters, numbers, spaces, hyphens and apostrophes allowed.</small>
+        </ng-container>
+      </div>
 
-    
-    <div class="flex flex-col gap-1">
-      <input 
-        pInputText 
-        formControlName="targetAmount" 
-        placeholder="Target Amount"
-        [class.ng-invalid]="form.get('targetAmount')?.invalid && form.get('targetAmount')?.touched" />
-      <ng-container *ngIf="form.get('targetAmount')?.touched">
-        <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('required')">Target amount is required.</small>
-        <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('min')">Amount must be at least 1.</small>
-        <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('max')">Amount cannot exceed 100,000,000.</small>
-      </ng-container>
-    </div>
+      <div class="flex flex-col gap-1">
+        <input
+          pInputText
+          formControlName="targetAmount"
+          placeholder="Target Amount"
+          [class.ng-invalid]="form.get('targetAmount')?.invalid && form.get('targetAmount')?.touched" />
+        <ng-container *ngIf="form.get('targetAmount')?.touched">
+          <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('required')">Target amount is required.</small>
+          <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('min')">Amount must be at least 1.</small>
+          <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('max')">Amount cannot exceed 100,000,000.</small>
+        </ng-container>
+      </div>
 
-    
-    <div class="flex flex-col gap-1">
-      <input 
-        pInputText 
-        formControlName="currentSavedAmount" 
-        placeholder="Saved Amount"
-        [class.ng-invalid]="form.get('currentSavedAmount')?.invalid && form.get('currentSavedAmount')?.touched" />
-      <ng-container *ngIf="form.get('currentSavedAmount')?.touched">
-        <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('required')">Saved amount is required.</small>
-        <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('min')">Amount cannot be negative.</small>
-        <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('max')">Amount cannot exceed 100,000,000.</small>
-        <small class="text-red-500" *ngIf="form.hasError('savedExceedsTarget')">Saved amount cannot exceed target amount.</small>
-      </ng-container>
-    </div>
+      <div class="flex flex-col gap-1">
+        <input
+          pInputText
+          formControlName="currentSavedAmount"
+          placeholder="Saved Amount"
+          [class.ng-invalid]="form.get('currentSavedAmount')?.invalid && form.get('currentSavedAmount')?.touched" />
+        <ng-container *ngIf="form.get('currentSavedAmount')?.touched">
+          <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('required')">Saved amount is required.</small>
+          <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('min')">Amount cannot be negative.</small>
+          <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('max')">Amount cannot exceed 100,000,000.</small>
+          <small class="text-red-500" *ngIf="form.hasError('savedExceedsTarget')">Saved amount cannot exceed target amount.</small>
+        </ng-container>
+      </div>
 
-   
-    <div class="flex flex-col gap-1">
-      <p-datepicker 
-        appendTo="body"
-        formControlName="goalDate"
-        dateFormat="yy-mm-dd"
-        showIcon="true"
-        [class.ng-invalid]="form.get('goalDate')?.invalid && form.get('goalDate')?.touched"
-        class="w-full">
-      </p-datepicker>
-      <ng-container *ngIf="form.get('goalDate')?.touched">
-        <small class="text-red-500" *ngIf="form.get('goalDate')?.hasError('required')">Goal date is required.</small>
-        <small class="text-red-500" *ngIf="form.get('goalDate')?.hasError('pastDate')">Goal date cannot be in the past.</small>
-      </ng-container>
-    </div>
+      <div class="flex flex-col gap-1">
+        <p-datepicker
+          appendTo="body"
+          formControlName="goalDate"
+          dateFormat="yy-mm-dd"
+          showIcon="true"
+          [class.ng-invalid]="form.get('goalDate')?.invalid && form.get('goalDate')?.touched"
+          class="w-full">
+        </p-datepicker>
+        <ng-container *ngIf="form.get('goalDate')?.touched">
+          <small class="text-red-500" *ngIf="form.get('goalDate')?.hasError('required')">Goal date is required.</small>
+          <small class="text-red-500" *ngIf="form.get('goalDate')?.hasError('pastDate')">Goal date cannot be in the past.</small>
+        </ng-container>
+      </div>
 
-    
-    <div class="col-span-2 flex flex-col gap-1">
-      <p-select 
-        [options]="goalType" 
-        formControlName="goalType"
-        optionLabel="label" 
-        optionValue="value"
-        placeholder="Goal Type" 
-        [class.ng-invalid]="form.get('goalType')?.invalid && form.get('goalType')?.touched"
-        class="w-full"
-        appendTo="body">
-      </p-select>
-      <ng-container *ngIf="form.get('goalType')?.touched">
-        <small class="text-red-500" *ngIf="form.get('goalType')?.hasError('required')">Goal type is required.</small>
-      </ng-container>
-    </div>
+      <div class="col-span-2 flex flex-col gap-1">
+        <p-select
+          [options]="goalType"
+          formControlName="goalType"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Goal Type"
+          [class.ng-invalid]="form.get('goalType')?.invalid && form.get('goalType')?.touched"
+          class="w-full"
+          appendTo="body">
+        </p-select>
+        <ng-container *ngIf="form.get('goalType')?.touched">
+          <small class="text-red-500" *ngIf="form.get('goalType')?.hasError('required')">Goal type is required.</small>
+        </ng-container>
+      </div>
 
-    
-    <div class="flex flex-col gap-1">
-      <p-select
-        appendTo="body"
-        [options]="clients()"
-        optionLabel="firstName"
-        optionValue="id"
-        formControlName="clientId"
-        placeholder="Select Client"
-        [class.ng-invalid]="form.get('clientId')?.invalid && form.get('clientId')?.touched"
-        class="w-full">
-      </p-select>
-      <ng-container *ngIf="form.get('clientId')?.touched">
-        <small class="text-red-500" *ngIf="form.get('clientId')?.hasError('required')">Please select a client.</small>
-      </ng-container>
-    </div>
+      <div class="flex flex-col gap-1">
+        <p-select
+          appendTo="body"
+          [options]="clients()"
+          optionLabel="firstName"
+          optionValue="id"
+          formControlName="clientId"
+          placeholder="Select Client"
+          [class.ng-invalid]="form.get('clientId')?.invalid && form.get('clientId')?.touched"
+          class="w-full">
+        </p-select>
+        <ng-container *ngIf="form.get('clientId')?.touched">
+          <small class="text-red-500" *ngIf="form.get('clientId')?.hasError('required')">Please select a client.</small>
+        </ng-container>
+      </div>
 
-  </form>
+    </form>
 
-  <ng-template pTemplate="footer">
-    <button 
-      pButton 
-      label="Cancel" 
-      class="p-button-text"
-      (click)="showFormDialog.set(false)">
-    </button>
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        label="Cancel"
+        class="p-button-text"
+        (click)="showFormDialog.set(false)">
+      </button>
+      <button
+        pButton
+        label="Save"
+        [disabled]="form.invalid"
+        (click)="saveGoal()">
+      </button>
+    </ng-template>
 
-    <button 
-      pButton 
-      label="Save" 
-      [disabled]="form.invalid"
-      (click)="saveGoal()">
-    </button>
-  </ng-template>
-
-</p-dialog>
+  </p-dialog>
 
 </div>

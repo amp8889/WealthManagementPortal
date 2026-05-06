@@ -14,6 +14,7 @@ import { Select } from 'primeng/select';
 import { DeleteConfirmationModal } from '../components/delete-confirmation-modal/delete-confirmation-modal';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
+import { GoalService } from '../services/GoalService';
 
 
 
@@ -30,13 +31,13 @@ export class ClientRecords implements OnInit {
 
   clients = signal<ClientRecord[]>([]);
   selectedClient = signal<ClientRecord | null>(null);
-
+  goals = signal<any[]>([]);
 
   showFormDialog = signal<boolean>(false);
   showDeleteDialog = signal<boolean>(false);
 
 
-  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder) {
+  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder, private goalService: GoalService) {
 
 
   }
@@ -60,7 +61,7 @@ export class ClientRecords implements OnInit {
 
   ngOnInit(): void {
     this.loadClients();
-
+    this.loadGoals();
 
     this.form = this.formBuilder.group({
       firstName: [
@@ -111,6 +112,23 @@ export class ClientRecords implements OnInit {
 
     });
   }
+
+loadGoals() {
+  this.goalService.getAll().subscribe({
+    next: (data) => {
+      this.goals.set(data);
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+
+getGoalCount(clientId: string): number {
+  return this.goals().filter(goal =>
+    goal.clientId === clientId ||
+    (Array.isArray(goal.clientId) && goal.clientId.includes(clientId))
+  ).length;
+}
 
 
 
