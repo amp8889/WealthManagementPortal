@@ -15,10 +15,9 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>Tier</th>
-        <th>Country</th>
         <th>Risk</th>
-        <th>Objective</th>
         <th>Actions</th>
+
       </tr>
     </ng-template>
 
@@ -27,9 +26,7 @@
         <td>{{ client.firstName }}</td>
         <td>{{ client.lastName }}</td>
         <td>{{ client.clientTier }}</td>
-        <td>{{ client.country }}</td>
         <td>{{client.riskTolerance}}</td>
-        <td>{{client.primaryObjective}}</td>
         <td class="flex gap-2">
 
 
@@ -62,30 +59,96 @@
 
     <form [formGroup]="form" class="flex flex-col gap-5">
 
-      <input pInputText formControlName="firstName" placeholder="First Name" class="w-full" />
-      <input pInputText formControlName="lastName" placeholder="Last Name" class="w-full" />
-      <input pInputText formControlName="country" placeholder="Country" class="w-full" />
+
+      <div class="flex flex-col gap-1">
+        <input pInputText formControlName="firstName" placeholder="First Name"
+          [class.ng-invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched" class="w-full" />
+        <ng-container *ngIf="form.get('firstName')?.touched">
+          <small class="text-red-500" *ngIf="form.get('firstName')?.hasError('required')">First name is
+            required.</small>
+          <small class="text-red-500" *ngIf="form.get('firstName')?.hasError('minlength')">Must be at least 2
+            characters.</small>
+          <small class="text-red-500" *ngIf="form.get('firstName')?.hasError('maxlength')">Cannot exceed 50
+            characters.</small>
+          <small class="text-red-500" *ngIf="form.get('firstName')?.hasError('pattern')">Only letters, spaces, hyphens
+            and apostrophes allowed.</small>
+        </ng-container>
+      </div>
 
 
-      <p-select [options]="clientTierOptions" formControlName="clientTier" optionLabel="label" optionValue="value"
-        placeholder="Client Tier" class="w-full" appendTo="body">
-      </p-select>
+      <div class="flex flex-col gap-1">
+        <input pInputText formControlName="lastName" placeholder="Last Name"
+          [class.ng-invalid]="form.get('lastName')?.invalid && form.get('lastName')?.touched" class="w-full" />
+        <ng-container *ngIf="form.get('lastName')?.touched">
+          <small class="text-red-500" *ngIf="form.get('lastName')?.hasError('required')">Last name is required.</small>
+          <small class="text-red-500" *ngIf="form.get('lastName')?.hasError('minlength')">Must be at least 2
+            characters.</small>
+          <small class="text-red-500" *ngIf="form.get('lastName')?.hasError('maxlength')">Cannot exceed 50
+            characters.</small>
+          <small class="text-red-500" *ngIf="form.get('lastName')?.hasError('pattern')">Only letters, spaces, hyphens
+            and apostrophes allowed.</small>
+        </ng-container>
+      </div>
 
-      <p-select [options]="riskToleranceOptions" formControlName="riskTolerance" optionLabel="label" optionValue="value"
-        placeholder="Risk Tolerance" class="w-full" appendTo="body">
-      </p-select>
 
-      <p-select [options]="primaryObjectiveOptions" formControlName="primaryObjective" optionLabel="label"
-        optionValue="value" placeholder="Primary Objective" class="w-full" appendTo="body">
-      </p-select>
+      <div class="flex flex-col gap-1">
+        <input pInputText formControlName="country" placeholder="Country"
+          [class.ng-invalid]="form.get('country')?.invalid && form.get('country')?.touched" class="w-full" />
+        <ng-container *ngIf="form.get('country')?.touched">
+          <small class="text-red-500" *ngIf="form.get('country')?.hasError('required')">Country is required.</small>
+          <small class="text-red-500" *ngIf="form.get('country')?.hasError('minlength')">Must be at least 2
+            characters.</small>
+          <small class="text-red-500" *ngIf="form.get('country')?.hasError('maxlength')">Cannot exceed 100
+            characters.</small>
+        </ng-container>
+      </div>
 
+
+      <div class="flex flex-col gap-1">
+        <p-select [options]="clientTierOptions" formControlName="clientTier" optionLabel="label" optionValue="value"
+          placeholder="Client Tier"
+          [class.ng-invalid]="form.get('clientTier')?.invalid && form.get('clientTier')?.touched" class="w-full"
+          appendTo="body">
+        </p-select>
+        <ng-container *ngIf="form.get('clientTier')?.touched">
+          <small class="text-red-500" *ngIf="form.get('clientTier')?.hasError('required')">Client tier is
+            required.</small>
+        </ng-container>
+      </div>
+
+
+      <div class="flex flex-col gap-1">
+        <p-select [options]="riskToleranceOptions" formControlName="riskTolerance" optionLabel="label"
+          optionValue="value" placeholder="Risk Tolerance"
+          [class.ng-invalid]="form.get('riskTolerance')?.invalid && form.get('riskTolerance')?.touched" class="w-full"
+          appendTo="body">
+        </p-select>
+        <ng-container *ngIf="form.get('riskTolerance')?.touched">
+          <small class="text-red-500" *ngIf="form.get('riskTolerance')?.hasError('min')">Risk tolerance must be at least
+            1.</small>
+          <small class="text-red-500" *ngIf="form.get('riskTolerance')?.hasError('max')">Risk tolerance cannot exceed
+            10.</small>
+        </ng-container>
+      </div>
+
+
+      <div class="flex flex-col gap-1">
+        <p-select [options]="primaryObjectiveOptions" formControlName="primaryObjective" optionLabel="label"
+          optionValue="value" placeholder="Primary Objective"
+          [class.ng-invalid]="form.get('primaryObjective')?.invalid && form.get('primaryObjective')?.touched"
+          class="w-full" appendTo="body">
+        </p-select>
+        <ng-container *ngIf="form.get('primaryObjective')?.touched">
+          <small class="text-red-500" *ngIf="form.get('primaryObjective')?.hasError('maxlength')">Cannot exceed 500
+            characters.</small>
+        </ng-container>
+      </div>
 
     </form>
 
     <ng-template pTemplate="footer">
       <button pButton label="Cancel" class="p-button-text" (click)="showFormDialog.set(false)">
       </button>
-
       <button pButton label="Save" [disabled]="form.invalid" (click)="saveClient()">
       </button>
     </ng-template>
