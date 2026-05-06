@@ -1,5 +1,9 @@
 ## Backend Endpoints
 
+### Spring Actuator
+
+    GET /actuator/*
+
 ### Advisors
 
     GET /api/advisors

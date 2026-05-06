@@ -2,6 +2,7 @@ package com.project2.wealthmanagement.Enums;
 
 public enum UserRole {
 
+    ADMIN("Admin"),
     ADVISOR("Advisor"),
     AUDITOR("Auditor"),
     CLIENT("Client"),
