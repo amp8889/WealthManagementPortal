@@ -13,12 +13,13 @@ import { PrimaryObjective } from '../types/PrimaryObjective';
 import { Select } from 'primeng/select';
 import { DeleteConfirmationModal } from '../components/delete-confirmation-modal/delete-confirmation-modal';
 import { DatePickerModule } from 'primeng/datepicker';
+import { CommonModule } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-client-records',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, DatePickerModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, DatePickerModule, CommonModule],
   templateUrl: './client-records.html',
   styleUrl: './client-records.css',
 })
@@ -62,12 +63,32 @@ export class ClientRecords implements OnInit {
 
 
     this.form = this.formBuilder.group({
-      firstName: ["", [Validators.required]],
-      lastName: ["", [Validators.required]],
+      firstName: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ],
+      ],
+      lastName: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+        ],
+      ],
       clientTier: ["", [Validators.required]],
-      country: ["", [Validators.required]],
-      riskTolerance: [""],
-      primaryObjective: [""],
+      country: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+        ],
+      ], riskTolerance: ["", [Validators.required]],
+      primaryObjective: ["", [Validators.required]],
     });
 
 
