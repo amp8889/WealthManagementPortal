@@ -17,7 +17,8 @@ import { futureDateValidator } from '../validators/futureDateValidator';
 
 @Component({
   selector: 'app-goal',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, CommonModule, DatePicker, ProgressBarModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule,
+    FormsModule, Select, DeleteConfirmationModal, CommonModule, DatePicker, ProgressBarModule],
   templateUrl: './goal.html',
   styleUrl: './goal.css',
 })
@@ -26,29 +27,19 @@ export class Goal implements OnInit {
   clients = signal<any[]>([]);
   goals = signal<GoalModel[]>([]);
   selectedGoal = signal<GoalModel | null>(null);
-
-
   showFormDialog = signal<boolean>(false);
   showDeleteDialog = signal<boolean>(false);
 
-
-
-  constructor(private goalService: GoalService, private clientService: ClientRecordsService, private formBuilder: FormBuilder) {
-
-
+  constructor(private goalService: GoalService, private clientService:
+    ClientRecordsService, private formBuilder: FormBuilder) {
   }
-
 
   goalType = Object
     .entries(GoalType).map(([key, value]) => ({
 
       label: value,
       value: key
-
-
-
     }));
-
 
   form!: FormGroup;
 
@@ -76,7 +67,7 @@ export class Goal implements OnInit {
         [
           Validators.required,
           Validators.min(1),
-          Validators.max(100_000_000), 
+          Validators.max(100_000_000),
         ],
       ],
       goalType: [
@@ -94,8 +85,8 @@ export class Goal implements OnInit {
         "",
         [
           Validators.required,
-          Validators.min(0),             
-          Validators.max(100_000_000),   
+          Validators.min(0),
+          Validators.max(100_000_000),
         ],
       ],
       clientId: [
@@ -105,8 +96,6 @@ export class Goal implements OnInit {
         ],
       ],
     });
-
-
   }
 
   loadGoals() {
@@ -118,16 +107,13 @@ export class Goal implements OnInit {
       error: (err) => {
         console.error(err)
       }
-
     });
   }
 
-getClientName(clientId: string): string {
-  const client = this.clients().find(c => c.id === clientId);
-  return client ? `${client.firstName} ${client.lastName}` : '—';
-}
-
-
+  getClientName(clientId: string): string {
+    const client = this.clients().find(c => c.id === clientId);
+    return client ? `${client.firstName} ${client.lastName}` : '—';
+  }
 
   saveGoal() {
     if (this.form.invalid) {
@@ -135,13 +121,9 @@ getClientName(clientId: string): string {
     }
 
     const { goalName, targetAmount, goalType, goalDate, currentSavedAmount, clientId } = this.form.value;
-
-
     const formattedDate = goalDate
       ? new Date(goalDate).toISOString().split('T')[0]
       : null;
-
-
 
     const payload: GoalModel = {
       goalName,
@@ -181,14 +163,10 @@ getClientName(clientId: string): string {
     }
   }
 
-
-
   handleDeleteGoal(goal: GoalModel) {
     this.selectedGoal.set(goal);
     this.showDeleteDialog.set(true);
   }
-
-
 
   deleteGoal() {
 
@@ -206,14 +184,6 @@ getClientName(clientId: string): string {
         console.log(err)
         this.showDeleteDialog.set(false);
       }
-
-
     })
-
-
-
   }
-
-
-
 }
