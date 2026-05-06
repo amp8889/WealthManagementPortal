@@ -97,80 +97,128 @@
   </app-delete-confirmation-modal>
 
  
-  <p-dialog 
-    [visible]="showFormDialog()" 
-    (visibleChange)="showFormDialog.set($event)" 
-    header="Goal Details"
-    [modal]="true" 
-    [style]="{width: '450px'}">
+<p-dialog 
+  [visible]="showFormDialog()" 
+  (visibleChange)="showFormDialog.set($event)" 
+  header="Goal Details"
+  [modal]="true" 
+  [style]="{width: '450px'}">
 
-    <form [formGroup]="form" class="grid grid-cols-2 gap-4">
+  <form [formGroup]="form" class="grid grid-cols-2 gap-4">
 
+    <!-- Goal Name -->
+    <div class="col-span-2 flex flex-col gap-1">
       <input 
         pInputText 
         formControlName="goalName" 
-        placeholder="Goal Name" 
-        class="col-span-2" />
+        placeholder="Goal Name"
+        [class.ng-invalid]="form.get('goalName')?.invalid && form.get('goalName')?.touched"
+        class="w-full" />
+      <ng-container *ngIf="form.get('goalName')?.touched">
+        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('required')">Goal name is required.</small>
+        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('minlength')">Must be at least 3 characters.</small>
+        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('maxlength')">Cannot exceed 100 characters.</small>
+        <small class="text-red-500" *ngIf="form.get('goalName')?.hasError('pattern')">Only letters, numbers, spaces, hyphens and apostrophes allowed.</small>
+      </ng-container>
+    </div>
 
+    <!-- Target Amount -->
+    <div class="flex flex-col gap-1">
       <input 
         pInputText 
         formControlName="targetAmount" 
-        placeholder="Target Amount" />
+        placeholder="Target Amount"
+        [class.ng-invalid]="form.get('targetAmount')?.invalid && form.get('targetAmount')?.touched" />
+      <ng-container *ngIf="form.get('targetAmount')?.touched">
+        <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('required')">Target amount is required.</small>
+        <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('min')">Amount must be at least 1.</small>
+        <small class="text-red-500" *ngIf="form.get('targetAmount')?.hasError('max')">Amount cannot exceed 100,000,000.</small>
+      </ng-container>
+    </div>
 
+    <!-- Current Saved Amount -->
+    <div class="flex flex-col gap-1">
       <input 
         pInputText 
         formControlName="currentSavedAmount" 
-        placeholder="Saved Amount" />
+        placeholder="Saved Amount"
+        [class.ng-invalid]="form.get('currentSavedAmount')?.invalid && form.get('currentSavedAmount')?.touched" />
+      <ng-container *ngIf="form.get('currentSavedAmount')?.touched">
+        <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('required')">Saved amount is required.</small>
+        <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('min')">Amount cannot be negative.</small>
+        <small class="text-red-500" *ngIf="form.get('currentSavedAmount')?.hasError('max')">Amount cannot exceed 100,000,000.</small>
+        <small class="text-red-500" *ngIf="form.hasError('savedExceedsTarget')">Saved amount cannot exceed target amount.</small>
+      </ng-container>
+    </div>
 
-            <p-datepicker appendTo="body"
-            formControlName="goalDate"
-            dateFormat="yy-mm-dd"
-            showIcon="true"
-            class="w-full">
-            </p-datepicker>
+    <!-- Goal Date -->
+    <div class="flex flex-col gap-1">
+      <p-datepicker 
+        appendTo="body"
+        formControlName="goalDate"
+        dateFormat="yy-mm-dd"
+        showIcon="true"
+        [class.ng-invalid]="form.get('goalDate')?.invalid && form.get('goalDate')?.touched"
+        class="w-full">
+      </p-datepicker>
+      <ng-container *ngIf="form.get('goalDate')?.touched">
+        <small class="text-red-500" *ngIf="form.get('goalDate')?.hasError('required')">Goal date is required.</small>
+        <small class="text-red-500" *ngIf="form.get('goalDate')?.hasError('pastDate')">Goal date cannot be in the past.</small>
+      </ng-container>
+    </div>
 
+    <!-- Goal Type -->
+    <div class="col-span-2 flex flex-col gap-1">
       <p-select 
         [options]="goalType" 
         formControlName="goalType"
         optionLabel="label" 
         optionValue="value"
         placeholder="Goal Type" 
-        class="col-span-2 w-full"
+        [class.ng-invalid]="form.get('goalType')?.invalid && form.get('goalType')?.touched"
+        class="w-full"
         appendTo="body">
       </p-select>
+      <ng-container *ngIf="form.get('goalType')?.touched">
+        <small class="text-red-500" *ngIf="form.get('goalType')?.hasError('required')">Goal type is required.</small>
+      </ng-container>
+    </div>
 
-<p-select
-  appendTo="body"
-  [options]="clients()"
-  optionLabel="firstName"
-  optionValue="id"
-  formControlName="clientId"
-  placeholder="Select Client"
-  class="w-full">
-</p-select>
+    <!-- Client -->
+    <div class="flex flex-col gap-1">
+      <p-select
+        appendTo="body"
+        [options]="clients()"
+        optionLabel="firstName"
+        optionValue="id"
+        formControlName="clientId"
+        placeholder="Select Client"
+        [class.ng-invalid]="form.get('clientId')?.invalid && form.get('clientId')?.touched"
+        class="w-full">
+      </p-select>
+      <ng-container *ngIf="form.get('clientId')?.touched">
+        <small class="text-red-500" *ngIf="form.get('clientId')?.hasError('required')">Please select a client.</small>
+      </ng-container>
+    </div>
 
+  </form>
 
-    </form>
+  <ng-template pTemplate="footer">
+    <button 
+      pButton 
+      label="Cancel" 
+      class="p-button-text"
+      (click)="showFormDialog.set(false)">
+    </button>
 
-    
-    <ng-template pTemplate="footer">
+    <button 
+      pButton 
+      label="Save" 
+      [disabled]="form.invalid"
+      (click)="saveGoal()">
+    </button>
+  </ng-template>
 
-      <button 
-        pButton 
-        label="Cancel" 
-        class="p-button-text"
-        (click)="showFormDialog.set(false)">
-      </button>
-
-      <button 
-        pButton 
-        label="Save" 
-        [disabled]="form.invalid"
-        (click)="saveGoal()">
-      </button>
-
-    </ng-template>
-
-  </p-dialog>
+</p-dialog>
 
 </div>
