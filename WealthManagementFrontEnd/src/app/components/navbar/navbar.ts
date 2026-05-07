@@ -20,7 +20,7 @@ export class Navbar {
     {
       label: 'Client Records',
       icon: 'pi-database',
-      routerLink: '/client-records'
+      routerLink: '/clientrecords'
     },
     {
       label: 'Goals',
