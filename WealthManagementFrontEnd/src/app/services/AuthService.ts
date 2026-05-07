@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export type UserRole = 'ADMIN' | 'ADVISOR' | 'CLIENT';
 
@@ -16,8 +17,7 @@ export interface AuthUser {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API = 'http://wealthmanagementportal.eastus.cloudapp.azure.com/';
-
+  private readonly API = environment.apiUrl;
   currentUser = signal<AuthUser | null>(null);
 
   constructor(private http: HttpClient) {}
