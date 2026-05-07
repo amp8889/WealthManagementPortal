@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,15 +44,33 @@ public class GoogleOAuthConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(Customizer.withDefaults())
+                .headers(headers -> headers
+                        .contentTypeOptions(Customizer.withDefaults())
+                        .frameOptions(frameOptions -> frameOptions.deny())
+                        .xssProtection((xss) -> xss
+                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+                        .httpStrictTransportSecurity((hsts) -> hsts
+                                .includeSubDomains(true)
+                                .preload(true)
+                                .maxAgeInSeconds(31536000)))
                 .authorizeHttpRequests((authorize) -> authorize
+                        // Angular files
+                        .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/*.ico",
+                                "/media/**")
+                        .permitAll()
+                        .requestMatchers("/register").hasRole("UNREGISTERED")
+
                         // Expose registration flow
                         .requestMatchers(HttpMethod.PUT, "/api/register").hasRole("UNREGISTERED")
-                        .requestMatchers(HttpMethod.POST, "/api/clientrecords").hasRole("UNREGISTERED")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/clientrecords")
+                        .hasRole("UNREGISTERED")
                         .requestMatchers(HttpMethod.POST, "/api/advisors").hasRole("UNREGISTERED")
 
                         // Placeholder, permit all other roles
                         .requestMatchers("/**").hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT"))
-                .oauth2Login(oauth2 -> oauth2
+                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(endpoint -> endpoint
+                        .oidcUserService(oidcUserService()))
                         .successHandler(oauth2SuccessHandler()));
 
         return http.build();
