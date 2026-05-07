@@ -6,7 +6,7 @@ import { ClientRecord } from '../types/ClientRecord';
 import { Goal } from '../types/Goal';
 import { GoalService } from '../services/GoalService';
 import { ClientRecordsService } from '../services/ClientRecords';
-import { AuthService } from '../services/AuthService';
+// import { AuthService } from '../services/AuthService';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';

@@ -1,19 +1,5 @@
-<p-card header="Register" styleClass="w-full md:w-25rem mx-auto mt-6">
+<p-card header="Login" styleClass="w-full md:w-25rem mx-auto mt-6 shadow-3">
   <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-column gap-3">
-
-    <input
-      pInputText
-      formControlName="firstName"
-      placeholder="First Name"
-      class="w-full"
-    />
-
-    <input
-      pInputText
-      formControlName="lastName"
-      placeholder="Last Name"
-      class="w-full"
-    />
 
     <input
       pInputText
@@ -28,15 +14,19 @@
       placeholder="Password"
       styleClass="w-full"
       inputStyleClass="w-full"
-      [feedback]="true"
+      [feedback]="false"
     ></p-password>
 
     <button
       pButton
       type="submit"
-      label="Register"
+      label="Login"
       class="w-full"
     ></button>
+
+    <small class="text-red-500" *ngIf="error">
+      {{ error }}
+    </small>
 
   </form>
 </p-card>

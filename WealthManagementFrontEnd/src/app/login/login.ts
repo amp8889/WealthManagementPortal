@@ -9,37 +9,39 @@ import { PasswordModule } from 'primeng/password';
 
 
 @Component({
-  selector: 'app-register',
-  imports: [CommonModule,
+  selector: 'app-login',
+  imports: [    CommonModule,
     ReactiveFormsModule,
     CardModule,
     PasswordModule,
     InputTextModule,
-    ButtonModule,
-  ],
-  templateUrl: './register.html',
-  styleUrl: './register.css',
+    ButtonModule],
+  templateUrl: './login.html',
+  styleUrl: './login.css',
 })
-export class Register {
+export class Login {
   form: FormGroup;
+  error: string = '';
 
   constructor(private fb: FormBuilder, private auth: AuthService) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+      password: ['', Validators.required]
     });
   }
 
   submit() {
     if (this.form.invalid) return;
 
-    this.auth.register(this.form.value).subscribe({
+    const { email, password } = this.form.value;
+
+    this.auth.login(email, password).subscribe({
       next: () => {
-        console.log('Registered successfully');
+        console.log('Login successful');
       },
-      error: err => console.error(err)
+      error: () => {
+        this.error = 'Invalid credentials';
+      }
     });
   }
 }

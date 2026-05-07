@@ -62,6 +62,12 @@ public class UserController {
         return ResponseEntity.ok(service.createUser(user));
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User user) {
+    user.setRole(UserRole.CLIENT); // 🔒 force safe role
+    return ResponseEntity.ok(service.createUser(user));
+}
+
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody User newUser) {

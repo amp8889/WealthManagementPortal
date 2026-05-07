@@ -11,22 +11,13 @@ import Nora from "@primeuix/themes/Nora"
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { AuthService } from './services/AuthService';
-import { credentialsInterceptor } from './interceptors/credentials-interceptor';
-import { authInterceptor } from './interceptors/auth.interceptor';
 import { catchError, of } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([credentialsInterceptor, authInterceptor])), // ← only once
-    provideAppInitializer(() => {
-      const auth = inject(AuthService);
-      return auth.fetchCurrentUser().pipe(
-        catchError(() => of(null))
-      );
-    }),
+
     provideClientHydration(withEventReplay()),
     providePrimeNG({
       theme: {
