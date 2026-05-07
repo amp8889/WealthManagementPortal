@@ -1,11 +1,12 @@
 cd WealthManagementFrontEnd
+npm cache clean --force
 ng build --configuration production --delete-output-path=true 
 cd ..
 Remove-Item -Path ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
 Copy-Item -Path ".\WealthManagementFrontEnd\dist\WealthManagementFrontEnd\browser\*" -Destination ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
 
-docker build --no-cache -t wealthmanagement:v6 .
-docker tag wealthmanagement:v5 apmpacr.azurecr.io/wealthmanagement:v6
+docker build --no-cache -t wealthmanagement:v5 .
+docker tag wealthmanagement:v5 apmpacr.azurecr.io/wealthmanagement:v5
 
 az acr login --name apmpacr
 docker push apmpacr.azurecr.io/wealthmanagement:v5
