@@ -57,7 +57,7 @@ public class UserController {
 @GetMapping("/me")
 public ResponseEntity<User> me(Authentication auth) {
 
-    if (auth == null || !auth.isAuthenticated()) {
+    if (auth == null) {
         return ResponseEntity.status(401).build();
     }
 

@@ -43,7 +43,6 @@ export class Login {
 
     this.auth.login(email, password).subscribe({
 next: (res) => {
-  localStorage.setItem('role', res.role);
   this.router.navigate(['/']);
 },
       error: () => {

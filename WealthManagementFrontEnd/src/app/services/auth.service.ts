@@ -4,8 +4,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/user';
-
+private baseUrl = 'http://localhost:8080/api/user';
+private meUrl = 'http://localhost:8080/api/user/me';
   private userSubject = new BehaviorSubject<any>(this.loadUser());
   user$ = this.userSubject.asObservable();
 
@@ -14,33 +14,29 @@ export class AuthService {
   // -------------------------
   // LOGIN
   // -------------------------
-  login(email: string, password: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: 'Basic ' + btoa(`${email}:${password}`)
-    });
+login(email: string, password: string): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: 'Basic ' + btoa(`${email}:${password}`)
+  });
 
-    return this.http.get(`${this.apiUrl}`, {
-      headers,
-      withCredentials: true
-    }).pipe(
-      tap((user) => {
-        this.setUser(user);
-      })
-    );
-  }
-
+  return this.http.get(this.meUrl, {
+    headers,
+    withCredentials: true
+  }).pipe(
+    tap(user => this.userSubject.next(user))
+  );
+}
   // -------------------------
   // REGISTER
   // -------------------------
   register(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, user);
+    return this.http.post(`${this.baseUrl}/register`, user);
   }
 
   // -------------------------
   // USER STATE
   // -------------------------
   setUser(user: any) {
-    localStorage.setItem('user', JSON.stringify(user));
     this.userSubject.next(user);
   }
 
@@ -53,12 +49,10 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('user');
     this.userSubject.next(null);
   }
 
   private loadUser() {
-    const raw = localStorage.getItem('user');
-    return raw ? JSON.parse(raw) : null;
+    return null;
   }
 }
