@@ -1,63 +1,60 @@
 package com.project2.wealthmanagement.Services;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.project2.wealthmanagement.Models.User;
 import com.project2.wealthmanagement.Repositories.UserRepository;
-import com.project2.wealthmanagement.Enums.UserRole;
-
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    public User updateOrCreateGoogleUser(String googleId, String email,
-            String firstName, String lastName,
-            String avatarUrl) {
-        Optional<User> userByGoogleId = userRepository.findByGoogleId(googleId);
+private final UserRepository repository;
 
-        if (userByGoogleId.isPresent()) {
-            User user = userByGoogleId.get();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setAvatarUrl(avatarUrl);
-            return userRepository.save(user);
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
+
+    public List<User> getAllUsers() {
+        return repository.findAll();
+    }
+
+    public User getUserById(String id) {
+        Optional<User> user = repository.findById(id);
+        if (user.isPresent())
+            return user.get();
+        return null;
+    }
+
+    public User createUser(User user) {
+                if (user.getId() == null || user.getId().isEmpty()) {
+            user.setId(UUID.randomUUID().toString());
         }
-        else {
-            User newUser = new User(
-                    googleId,
-                    UserRole.UNREGISTERED,
-                    null,
-                    firstName,
-                    lastName,
-                    email,
-                    avatarUrl);
+        return repository.save(user);
+    }
 
-            return userRepository.save(newUser);
+    public User updateUser(String id, User user) {
+        user.setId(id);
+        return repository.save(user);
+    }
+
+    public boolean deleteUser(String id) {
+        if (getUserById(id) == null) {
+            return false;
         }
-    }
-
-    public void updateUserRoleAndRelatedId(String googleId, UserRole role, String relatedUserId) {
-        Optional<User> userByGoogleId = userRepository.findByGoogleId(googleId);
-        if (userByGoogleId.isPresent()) {
-            User user = userByGoogleId.get();
-            user.setRole(role);
-            user.setRelatedId(relatedUserId);
-            userRepository.save(user);
-        }
+        repository.deleteById(id);
+        return true;
     }
 
 
-    public Optional<User> findByGoogleId(String googleId) {
-        return userRepository.findByGoogleId(googleId);
-    }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+
+
+
+
+
 }

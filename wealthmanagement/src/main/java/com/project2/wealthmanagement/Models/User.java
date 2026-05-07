@@ -9,34 +9,50 @@ import org.springframework.data.annotation.Id;
 @Document(collection = "user")
 public class User {
     @Id
-    private String googleId;
+    private String id;
+    private String email;
+    private String password;
     private UserRole role;
     private String relatedId;
     private String firstName;
     private String lastName;
-    private String email;
-    private String avatarUrl;
-
+    
     public User() {
     }
 
-    public User(String googleId, UserRole role, String relatedId, String firstName, String lastName, String email,
-            String avatarUrl) {
-        this.googleId = googleId;
+    public User(String id, String email, String password, UserRole role, String relatedId, String firstName,
+            String lastName) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
         this.role = role;
         this.relatedId = relatedId;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
-        this.avatarUrl = avatarUrl;
     }
 
-    public String getGoogleId() {
-        return googleId;
+    public String getPassword() {
+        return password;
     }
 
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public UserRole getRole() {
@@ -71,33 +87,17 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((googleId == null) ? 0 : googleId.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((role == null) ? 0 : role.hashCode());
         result = prime * result + ((relatedId == null) ? 0 : relatedId.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((avatarUrl == null) ? 0 : avatarUrl.hashCode());
         return result;
     }
 
@@ -110,10 +110,20 @@ public class User {
         if (getClass() != obj.getClass())
             return false;
         User other = (User) obj;
-        if (googleId == null) {
-            if (other.googleId != null)
+        if (id == null) {
+            if (other.id != null)
                 return false;
-        } else if (!googleId.equals(other.googleId))
+        } else if (!id.equals(other.id))
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
             return false;
         if (role != other.role)
             return false;
@@ -132,23 +142,17 @@ public class User {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (avatarUrl == null) {
-            if (other.avatarUrl != null)
-                return false;
-        } else if (!avatarUrl.equals(other.avatarUrl))
-            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "User [googleId=" + googleId + ", role=" + role + ", relatedId=" + relatedId + ", firstName=" + firstName
-                + ", lastName=" + lastName + ", email=" + email + ", avatarUrl=" + avatarUrl + "]";
+        return "User [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + ", relatedId="
+                + relatedId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
     }
+
+    
+    
+   
     
 }
