@@ -16,7 +16,7 @@ export interface AuthUser {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API = 'http://localhost:8080';
+  private readonly API = 'http://wealthmanagementportal.eastus.cloudapp.azure.com/';
 
   currentUser = signal<AuthUser | null>(null);
 

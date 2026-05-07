@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class GoalService {
 
-  private baseUrl = 'http://localhost:8080/api/goal';
+  private baseUrl = 'http://wealthmanagementportal.eastus.cloudapp.azure.com/api/goal';
 
   constructor(private http: HttpClient) {}
 
