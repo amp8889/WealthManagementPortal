@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ClientRecord } from '../types/ClientRecord';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientRecordsService {
 
-  private baseUrl = 'http://wealthmanagementportal.eastus.cloudapp.azure.com/clientrecords';
+  private baseUrl = `${environment.apiUrl}/clientrecords`;
 
   constructor(private http: HttpClient) {}
 

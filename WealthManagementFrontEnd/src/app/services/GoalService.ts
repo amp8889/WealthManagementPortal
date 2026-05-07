@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Goal } from '../types/Goal';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GoalService {
 
-  private baseUrl = 'http://wealthmanagementportal.eastus.cloudapp.azure.com/api/goal';
+  private baseUrl = `${environment.apiUrl}/goal`;
 
   constructor(private http: HttpClient) {}
 

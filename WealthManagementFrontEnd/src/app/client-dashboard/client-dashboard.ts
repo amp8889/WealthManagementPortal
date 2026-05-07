@@ -36,7 +36,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ClientDashboard implements OnInit {
 
-  private route = inject(ActivatedRoute);  // move out of constructor
+  private route = inject(ActivatedRoute);  
 
 
 
