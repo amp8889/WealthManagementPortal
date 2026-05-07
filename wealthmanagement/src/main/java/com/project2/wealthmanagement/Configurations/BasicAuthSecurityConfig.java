@@ -28,6 +28,8 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.project2.wealthmanagement.Enums.UserRole;
 import com.project2.wealthmanagement.Services.UserService;
@@ -52,29 +54,31 @@ public class BasicAuthSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // APIs usually disable this
-            .cors(Customizer.withDefaults())
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // IMPORTANT for APIs
+                .csrf(csrf -> csrf.disable()) // APIs usually disable this
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // IMPORTANT for APIs
 
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/",
-                    "/index.html",
-                    "/**/*.js",
-                    "/**/*.css",
-                    "/assets/**"
-                ).permitAll()
-                .requestMatchers("/register").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-                .requestMatchers("/api/**").hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT")
-                .anyRequest().authenticated()
-            )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/**/*.js",
+                                "/**/*.css",
+                                "/assets/**")
+                        .permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT")
+                        .anyRequest().authenticated())
 
-            .httpBasic(Customizer.withDefaults()); // 🔥 THIS is the key change
+                .httpBasic(Customizer.withDefaults()); // 🔥 THIS is the key change
 
         return http.build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
-
-

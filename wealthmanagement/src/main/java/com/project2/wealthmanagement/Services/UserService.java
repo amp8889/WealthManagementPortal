@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
 
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project2.wealthmanagement.Models.User;
@@ -13,10 +13,12 @@ import com.project2.wealthmanagement.Repositories.UserRepository;
 public class UserService {
 
 
+private final PasswordEncoder passwordEncoder;
 private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
@@ -33,6 +35,8 @@ private final UserRepository repository;
     public User createUser(User user) {
                 if (user.getId() == null || user.getId().isEmpty()) {
             user.setId(UUID.randomUUID().toString());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         }
         return repository.save(user);
     }
