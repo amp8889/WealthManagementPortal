@@ -13,17 +13,23 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthService } from './services/AuthService';
 import { credentialsInterceptor } from './interceptors/credentials-interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
+import { catchError, of } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), 
     provideHttpClient(),
+    provideHttpClient(withInterceptors([credentialsInterceptor, authInterceptor])),
+
     provideHttpClient(withInterceptors([credentialsInterceptor])),
 
     provideAppInitializer(() => {
       const auth = inject(AuthService);
-      return auth.fetchCurrentUser();
+      return auth.fetchCurrentUser().pipe(
+        catchError(() => of(null))
+      );
     }),
     provideClientHydration(withEventReplay()),
     providePrimeNG({

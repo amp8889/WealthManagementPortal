@@ -32,6 +32,14 @@ import com.project2.wealthmanagement.Models.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource; // ← servlet, not reactive
+
+
+
 @Configuration
 @EnableWebSecurity
 @Profile("!dev")
@@ -40,41 +48,54 @@ public class GoogleOAuthConfiguration {
     @Autowired
     private UserService userService;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(Customizer.withDefaults())
-                .headers(headers -> headers
-                        .contentTypeOptions(Customizer.withDefaults())
-                        .frameOptions(frameOptions -> frameOptions.deny())
-                        .xssProtection((xss) -> xss
-                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-                        .httpStrictTransportSecurity((hsts) -> hsts
-                                .includeSubDomains(true)
-                                .preload(true)
-                                .maxAgeInSeconds(31536000)))
-                .authorizeHttpRequests((authorize) -> authorize
-                        // Angular files
-                        .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/*.ico",
-                                "/media/**")
-                        .permitAll()
-                        .requestMatchers("/register").hasRole("UNREGISTERED")
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
 
-                        // Expose registration flow
-                        .requestMatchers(HttpMethod.PUT, "/api/register").hasRole("UNREGISTERED")
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/clientrecords")
-                        .hasRole("UNREGISTERED")
-                        .requestMatchers(HttpMethod.POST, "/api/advisors").hasRole("UNREGISTERED")
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource))
+        .csrf(Customizer.withDefaults())
+        .headers(headers -> headers
+            .contentTypeOptions(Customizer.withDefaults())
+            .frameOptions(frameOptions -> frameOptions.deny())
+            .xssProtection((xss) -> xss
+                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+            .httpStrictTransportSecurity((hsts) -> hsts
+                .includeSubDomains(true)
+                .preload(true)
+                .maxAgeInSeconds(31536000)))
+        .authorizeHttpRequests((authorize) -> authorize
+            .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/*.ico", "/media/**")
+                .permitAll()
+            .requestMatchers("/register")
+                .hasRole("UNREGISTERED")
+            .requestMatchers(HttpMethod.PUT, "/api/register")
+                .hasRole("UNREGISTERED")
+            .requestMatchers(HttpMethod.POST, "/api/clientrecords")
+                .hasRole("UNREGISTERED")
+            .requestMatchers(HttpMethod.POST, "/api/advisors")
+                .hasRole("UNREGISTERED")
+            .requestMatchers("/**")
+                .hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT"))
+        .exceptionHandling(exceptions -> exceptions
+            .authenticationEntryPoint((request, response, authException) -> {
+                String uri = request.getRequestURI();
+                if (uri.startsWith("/api/")) {
+                    // API calls get a 401 so Angular can handle it
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                } else {
+                    // Page requests get redirected to Google OAuth
+                    response.sendRedirect("/oauth2/authorization/google");
+                }
+            }))
+        .oauth2Login(oauth2 -> oauth2
+            .userInfoEndpoint(endpoint -> endpoint
+                .oidcUserService(oidcUserService()))
+            .successHandler(oauth2SuccessHandler()));
 
-                        // Placeholder, permit all other roles
-                        .requestMatchers("/**").hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT"))
-                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(endpoint -> endpoint
-                        .oidcUserService(oidcUserService()))
-                        .successHandler(oauth2SuccessHandler()));
-
-        return http.build();
-    }
+    return http.build();
+}
 
     // Load role for RBAC
     @Bean
