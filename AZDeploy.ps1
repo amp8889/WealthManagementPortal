@@ -1,5 +1,5 @@
 cd WealthManagementFrontEnd
-ng build --delete-output-path=true --configuration
+ng build --delete-output-path=true --configuration production
 cd ..
 Remove-Item -Path ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
 Copy-Item -Path ".\WealthManagementFrontEnd\dist\WealthManagementFrontEnd\browser\*" -Destination ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
