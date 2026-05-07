@@ -1,15 +1,32 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, MenubarModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, MenubarModule, ButtonModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
 
+  constructor(private router: Router) {}
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('auth'); // simple placeholder auth check
+  }
+
+  logout() {
+    localStorage.removeItem('auth');
+    this.router.navigate(['/login']);
+  }
+
+  login() {
+    this.router.navigate(['/login']);
+  }
 
   items = [
     {
@@ -19,7 +36,7 @@ export class Navbar {
     },
     {
       label: 'Client Records',
-      icon: 'pi-database',
+      icon: 'pi pi-database',
       routerLink: '/clientrecords'
     },
     {
@@ -28,7 +45,4 @@ export class Navbar {
       routerLink: '/goal'
     }
   ];
-
-
-
 }

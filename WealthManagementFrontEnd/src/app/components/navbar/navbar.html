@@ -6,4 +6,22 @@
     </span>
   </ng-template>
 
+  <ng-template pTemplate="end">
+    <button
+      *ngIf="isLoggedIn()"
+      pButton
+      label="Logout"
+      icon="pi pi-sign-out"
+      (click)="logout()">
+    </button>
+
+    <button
+      *ngIf="!isLoggedIn()"
+      pButton
+      label="Login"
+      icon="pi pi-sign-in"
+      (click)="login()">
+    </button>
+  </ng-template>
+
 </p-menubar>
