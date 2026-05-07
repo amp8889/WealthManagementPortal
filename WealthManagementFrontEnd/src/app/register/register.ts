@@ -5,6 +5,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { AuthService } from '../services/AuthService';
 
 @Component({
   selector: 'app-register',
@@ -24,10 +25,10 @@ export class Register {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient
+    private authService: AuthService
   ) {
     this.registerForm = this.fb.group({
-      role: ['', Validators.required],
+      role: ['CLIENT', Validators.required],
       registrationCode: ['', [Validators.required]]
     });
   }
@@ -47,33 +48,20 @@ export class Register {
     }
 
     this.isSubmitting = true;
-    
+
     // Get form values
     const role = this.registerForm.get('role')?.value;
     let registrationCode = this.registerForm.get('registrationCode')?.value || '';
-    
-    // Format for NoSQL id
-    registrationCode = registrationCode.toLowerCase();
-    
-    // Build query parameters
-    const params = new HttpParams()
-      .set('role', role)
-      .set('relatedId', registrationCode);
-    
-    // Hit the PUT /api/register endpoint
-    this.http.post('/api/register', null, { 
-      params: params,
-      responseType: 'text'
-    }).subscribe({
+
+    this.authService.register(role, registrationCode).subscribe({
       next: (response) => {
-        alert(response);
         this.hideRegistrationCodeDialog();
-        
-        window.location.href = '/'; // TODO: Redirect after register
+        this.authService.fetchCurrentUser().subscribe(() => {
+          window.location.href = '/';
+        });
       },
       error: (error) => {
         console.error('Registration failed:', error);
-        alert(error.error || 'Registration failed, please try again.');
         this.isSubmitting = false;
       }
     });

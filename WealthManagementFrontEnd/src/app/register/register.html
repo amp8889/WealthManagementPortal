@@ -1,34 +1,40 @@
-<h1>User registration</h1>
+<div class="p-6">
+    <h1>User registration</h1>
 
-<button type="button" (click)="showRegistrationCodeDialog()">I have a registration code</button>
-<button type="button">Register without a code</button>
+    <div class="buttons">
+        <button pButton type="button" label="I have a registration code" class="p-button-primary"
+            (click)="showRegistrationCodeDialog()">
+        </button>
+        <button pButton type="button" label="Register without a code" class="p-button-secondary">
+            <!-- (click)="showRegistrationCodeDialog()"> -->
+        </button>
 
-<p-dialog header="Register with Code" [(visible)]="registrationCodeDialogVisible" [modal]="true">
+    </div>
+    <p-dialog header="Register with Code" [(visible)]="registrationCodeDialogVisible" [modal]="true" [draggable]="false"
+        [resizable]="false" [style]="{width: '800px'}">
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-container">
+            <div class="form-field">
+                <label for="role">I am a new: </label>
+                <p-select id="role" formControlName="role" [options]="roleOptions" optionLabel="label"
+                    optionValue="value" placeholder="Select role">
+                </p-select>
+            </div>
 
-        <div>
-            <label for="role">I am a new:</label>
-            <p-select id="role" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value"
-                placeholder="Select role">
-            </p-select>
-        </div>
+            <div class="form-field">
+                <label for="registrationCode">Registration code: </label>
+                <p-inputMask mask="********-****-****-****-************" formControlName="registrationCode"
+                    placeholder="Enter your registration code" [style]="{width: '100%'}">
+                </p-inputMask>
+            </div>
 
-        <div>
-            <label for="registrationCode">Registration code:</label>
-            <p-inputMask mask="********-****-****-****-************" formControlName="registrationCode"
-                placeholder="Enter your registration code">
-            </p-inputMask>
-        </div>
-
-        <ng-template pTemplate="footer">
-            <div>
+            <div class="form-actions">
                 <button pButton label="Cancel" type="button" severity="secondary" [outlined]="true"
                     (click)="hideRegistrationCodeDialog()">
                 </button>
-                <button pButton label="Register" [disabled]="registerForm.invalid">
+                <button pButton label="Register" type="submit" [disabled]="registerForm.invalid">
                 </button>
             </div>
-        </ng-template>
-    </form>
-</p-dialog>
+        </form>
+    </p-dialog>
+</div>

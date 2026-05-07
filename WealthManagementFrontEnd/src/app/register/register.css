@@ -1,0 +1,23 @@
+.form-container {
+    padding: 20px;
+}
+
+.form-field {
+    margin-bottom: 20px;
+}
+
+.form-field:last-of-type {
+    margin-bottom: 30px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+h1 {
+    font-size: 1.5rem; 
+    font-weight: 700;
+}
