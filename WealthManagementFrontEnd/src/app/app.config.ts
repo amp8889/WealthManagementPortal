@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from "primeng/config";
 import Aura from "@primeuix/themes/aura";
@@ -10,7 +10,7 @@ import Nora from "@primeuix/themes/Nora"
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthService } from './services/AuthService';
 
 export const appConfig: ApplicationConfig = {
@@ -18,12 +18,12 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), 
     provideHttpClient(),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (auth: AuthService) => () => auth.fetchCurrentUser(),
-      deps: [AuthService],
-      multi: true
-    },
+    // provideHttpClient(withInterceptors([credentialsInterceptor])),
+
+    provideAppInitializer(() => {
+      const auth = inject(AuthService);
+      return auth.fetchCurrentUser();
+    }),
     provideClientHydration(withEventReplay()),
     providePrimeNG({
       theme:{
