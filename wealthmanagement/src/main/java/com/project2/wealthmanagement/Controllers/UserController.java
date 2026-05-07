@@ -13,7 +13,7 @@ import com.project2.wealthmanagement.Enums.UserRole;
 import com.project2.wealthmanagement.Services.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@CrossOrigin(origins = { "http://127.0.0.1:3000", "http://localhost:8080", "http://127.0.0.1:5500",
+@CrossOrigin(origins = { "http://127.0.0.1:3000", "http://localhost:8080", "http://127.0.0.1:5500", "http://wealthmanagementportal.eastus.cloudapp.azure.com",
         "http://localhost:4200" })
 @RestController
 @RequestMapping("/api/register")
