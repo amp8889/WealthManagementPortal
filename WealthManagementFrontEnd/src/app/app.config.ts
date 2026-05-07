@@ -12,13 +12,14 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthService } from './services/AuthService';
+import { credentialsInterceptor } from './interceptors/credentials-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), 
     provideHttpClient(),
-    // provideHttpClient(withInterceptors([credentialsInterceptor])),
+    provideHttpClient(withInterceptors([credentialsInterceptor])),
 
     provideAppInitializer(() => {
       const auth = inject(AuthService);
