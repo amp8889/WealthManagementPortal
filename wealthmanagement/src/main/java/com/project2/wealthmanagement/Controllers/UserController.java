@@ -21,7 +21,7 @@ import com.project2.wealthmanagement.Enums.UserRole;
 import com.project2.wealthmanagement.Models.User;
 import com.project2.wealthmanagement.Services.UserService;
 import com.project2.wealthmanagement.Services.UserService;
-
+import org.springframework.security.core.Authentication;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,7 +54,19 @@ public class UserController {
         return ResponseEntity.ok(service.getUserById(id));
     }
 
+@GetMapping("/me")
+public ResponseEntity<User> me(Authentication auth) {
 
+    if (auth == null || !auth.isAuthenticated()) {
+        return ResponseEntity.status(401).build();
+    }
+
+    String email = auth.getName();
+
+    User user = service.getByEmail(email);
+
+    return ResponseEntity.ok(user);
+}
 
 
     @PostMapping

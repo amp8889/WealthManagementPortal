@@ -42,10 +42,10 @@ export class Login {
     const { email, password } = this.form.value;
 
     this.auth.login(email, password).subscribe({
-      next: () => {
-        this.error = '';
-        this.router.navigate(['/']); // ✅ HOME PAGE
-      },
+next: (res) => {
+  localStorage.setItem('role', res.role);
+  this.router.navigate(['/']);
+},
       error: () => {
         this.error = 'Invalid credentials';
       }

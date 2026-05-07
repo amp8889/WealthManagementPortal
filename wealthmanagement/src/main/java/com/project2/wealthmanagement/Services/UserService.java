@@ -55,7 +55,10 @@ private final UserRepository repository;
     }
 
 
-
+public User getByEmail(String email) {
+    return repository.findByEmail(email)
+        .orElse(null);
+}
 
 
 

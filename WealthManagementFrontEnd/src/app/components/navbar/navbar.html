@@ -1,5 +1,4 @@
-<p-menubar [model]="items">
-
+<p-menubar [model]="(items$ | async) ?? []">
   <ng-template pTemplate="start">
     <span class="text-xl font-bold cursor-default">
       Wealth Portal
@@ -7,21 +6,7 @@
   </ng-template>
 
   <ng-template pTemplate="end">
-    <button
-      *ngIf="isLoggedIn()"
-      pButton
-      label="Logout"
-      icon="pi pi-sign-out"
-      (click)="logout()">
-    </button>
-
-    <button
-      *ngIf="!isLoggedIn()"
-      pButton
-      label="Login"
-      icon="pi pi-sign-in"
-      (click)="login()">
-    </button>
+    <button pButton label="Logout" (click)="logout()"></button>
   </ng-template>
 
 </p-menubar>

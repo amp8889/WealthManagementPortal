@@ -12,9 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.cors.CorsConfigurationSource;
+
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
 @Configuration
 @EnableWebSecurity
 public class BasicAuthSecurityConfig {
@@ -22,53 +22,74 @@ public class BasicAuthSecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     public BasicAuthSecurityConfig(CorsConfigurationSource corsConfigurationSource) {
-        this.corsConfigurationSource = corsConfigurationSource;}
+        this.corsConfigurationSource = corsConfigurationSource;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            // 🚫 NEVER redirect to login page
+            // no redirects, Angular handles auth
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(unauthorizedEntryPoint())
             )
 
-            // APIs don't need CSRF
             .csrf(csrf -> csrf.disable())
 
-            // allow Angular frontend
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
 
-            // stateless API auth
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
             .authorizeHttpRequests(auth -> auth
+
+                // public endpoints
                 .requestMatchers(
                     "/",
                     "/index.html",
+                    "/favicon.ico",
                     "/**/*.js",
                     "/**/*.css",
                     "/assets/**"
                 ).permitAll()
 
-.requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
 
-                .anyRequest().authenticated()
+                // 🔥 AUTH CHECK ENDPOINT
+                .requestMatchers(HttpMethod.GET, "/api/user/me")
+                    .hasAnyRole("ADMIN", "ADVISOR", "CLIENT")
+
+                // 🔥 RBAC RULES
+
+                // ADMIN only (full system access)
+                .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
+
+                // ADVISOR + ADMIN (client data access)
+                .requestMatchers("/api/clientrecords/**")
+                    .hasAnyRole("ADMIN", "ADVISOR")
+
+                .requestMatchers("/api/goal/**")
+                    .hasAnyRole("ADMIN", "ADVISOR")
+
+                // CLIENT dashboard only
+                .requestMatchers("/api/client-dashboard/**")
+                    .hasAnyRole("CLIENT", "ADMIN", "ADVISOR")
+
+                // fallback
+                .requestMatchers("/api/**")
+                    .authenticated()
+
+                .anyRequest()
+                    .authenticated()
             )
 
-            // 🔐 BASIC AUTH ONLY (no OAuth anywhere)
             .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
 
-    /**
-     * 🔥 CRITICAL FIX:
-     * Prevent Spring from redirecting to login pages or OAuth flows.
-     * Instead return 401 so Angular handles it.
-     */
     @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) -> {
