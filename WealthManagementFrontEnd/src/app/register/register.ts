@@ -6,11 +6,12 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     ReactiveFormsModule,
     CardModule,
     PasswordModule,
@@ -23,7 +24,11 @@ import { PasswordModule } from 'primeng/password';
 export class Register {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router
+  ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -38,6 +43,7 @@ export class Register {
     this.auth.register(this.form.value).subscribe({
       next: () => {
         console.log('Registered successfully');
+        this.router.navigate(['/login']); // ✅ redirect after register
       },
       error: err => console.error(err)
     });

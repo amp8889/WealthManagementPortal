@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,7 @@ export class Login {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private cd: ChangeDetectorRef
+    private router: Router
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,12 +44,10 @@ export class Login {
     this.auth.login(email, password).subscribe({
       next: () => {
         this.error = '';
-        console.log('Login successful');
-        this.cd.detectChanges(); // safe UI refresh
+        this.router.navigate(['/']); // ✅ HOME PAGE
       },
       error: () => {
         this.error = 'Invalid credentials';
-        this.cd.detectChanges(); // fixes NG0100
       }
     });
   }
