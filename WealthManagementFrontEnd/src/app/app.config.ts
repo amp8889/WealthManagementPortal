@@ -19,12 +19,8 @@ import { catchError, of } from 'rxjs';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), 
-    provideHttpClient(),
-    provideHttpClient(withInterceptors([credentialsInterceptor, authInterceptor])),
-
-    provideHttpClient(withInterceptors([credentialsInterceptor])),
-
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([credentialsInterceptor, authInterceptor])), // ← only once
     provideAppInitializer(() => {
       const auth = inject(AuthService);
       return auth.fetchCurrentUser().pipe(
@@ -33,13 +29,9 @@ export const appConfig: ApplicationConfig = {
     }),
     provideClientHydration(withEventReplay()),
     providePrimeNG({
-      theme:{
-        preset: Nora ,
-                options: {
-           
-        }
-        
-
+      theme: {
+        preset: Nora,
+        options: {}
       },
       ripple: true
     })

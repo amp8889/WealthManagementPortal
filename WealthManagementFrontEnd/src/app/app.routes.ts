@@ -7,10 +7,10 @@ import { Register } from './register/register';
 
 export const routes: Routes = [
 
-    { path: "client-records", component: ClientRecords },
+    { path: "clientrecords", component: ClientRecords },
     { path: "goal", component: Goal },
     { path: "home", component: Home },
-    { path: 'client-records/:id', component: ClientDashboard },
+    { path: 'clientrecords/:id', component: ClientDashboard },
     { path: "register", component: Register },
     {
         path: 'dashboard/:clientId',

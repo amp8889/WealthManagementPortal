@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -21,6 +22,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,13 +36,10 @@ import com.project2.wealthmanagement.Models.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource; // ← servlet, not reactive
-
-
 
 @Configuration
 @EnableWebSecurity
@@ -51,51 +52,69 @@ public class GoogleOAuthConfiguration {
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .cors(cors -> cors.configurationSource(corsConfigurationSource))
-        .csrf(Customizer.withDefaults())
-        .headers(headers -> headers
-            .contentTypeOptions(Customizer.withDefaults())
-            .frameOptions(frameOptions -> frameOptions.deny())
-            .xssProtection((xss) -> xss
-                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-            .httpStrictTransportSecurity((hsts) -> hsts
-                .includeSubDomains(true)
-                .preload(true)
-                .maxAgeInSeconds(31536000)))
-        .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/*.ico", "/media/**")
-                .permitAll()
-            .requestMatchers("/register")
-                .hasRole("UNREGISTERED")
-            .requestMatchers(HttpMethod.PUT, "/api/register")
-                .hasRole("UNREGISTERED")
-            .requestMatchers(HttpMethod.POST, "/api/clientrecords")
-                .hasRole("UNREGISTERED")
-            .requestMatchers(HttpMethod.POST, "/api/advisors")
-                .hasRole("UNREGISTERED")
-            .requestMatchers("/**")
-                .hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT"))
-        .exceptionHandling(exceptions -> exceptions
-            .authenticationEntryPoint((request, response, authException) -> {
-                String uri = request.getRequestURI();
-                if (uri.startsWith("/api/")) {
-                    // API calls get a 401 so Angular can handle it
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                } else {
-                    // Page requests get redirected to Google OAuth
-                    response.sendRedirect("/oauth2/authorization/google");
-                }
-            }))
-        .oauth2Login(oauth2 -> oauth2
-            .userInfoEndpoint(endpoint -> endpoint
-                .oidcUserService(oidcUserService()))
-            .successHandler(oauth2SuccessHandler()));
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .csrf(Customizer.withDefaults())
+                .headers(headers -> headers
+                        .contentTypeOptions(Customizer.withDefaults())
+                        .frameOptions(frameOptions -> frameOptions.deny())
+                        .xssProtection((xss) -> xss
+                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+                        .httpStrictTransportSecurity((hsts) -> hsts
+                                .includeSubDomains(true)
+                                .preload(true)
+                                .maxAgeInSeconds(31536000)))
+                .authorizeHttpRequests((authorize) -> authorize
+    .requestMatchers(
+        "/",
+        "/index.html",
+        "/favicon.ico",
+        "/**/*.js",      
+        "/**/*.css",
+        "/**/*.ico",
+        "/**/*.txt",
+        "/**/*.map",
+        "/**/*.woff",
+        "/**/*.woff2",
+        "/**/*.ttf",
+        "/**/*.png",
+        "/**/*.jpg",
+        "/**/*.svg",
+        "/media/**",
+        "/assets/**"
+    ).permitAll()
+                        .requestMatchers("/register")
+                        .hasRole("UNREGISTERED")
+                        .requestMatchers(HttpMethod.PUT, "/api/register")
+                        .hasRole("UNREGISTERED")
+                        .requestMatchers(HttpMethod.POST, "/api/clientrecords")
+                        .hasRole("UNREGISTERED")
+                        .requestMatchers(HttpMethod.POST, "/api/advisors")
+                        .hasRole("UNREGISTERED")
+                        .requestMatchers("/**")
+                        .hasAnyRole("ADMIN", "ADVISOR", "AUDITOR", "CLIENT"))
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            String uri = request.getRequestURI();
+                            if (uri.startsWith("/api/")) {
+                                // API calls get a 401 so Angular can handle it
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                            } else {
+                                // Page requests get redirected to Google OAuth
+                                response.sendRedirect("/oauth2/authorization/google");
+                            }
+                        }))
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(endpoint -> endpoint
+                                .oidcUserService(oidcUserService()))
+                        .successHandler(oauth2SuccessHandler()));
 
-    return http.build();
-}
+        return http.build();
+    }
 
     // Load role for RBAC
     @Bean
@@ -144,4 +163,13 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         };
 
     }
+
+    @Bean
+    public CookieSerializer cookieSerializer() {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setSameSite("Lax");
+        serializer.setUseSecureCookie(false); // set true once you have HTTPS
+        return serializer;
+    }
+
 }
