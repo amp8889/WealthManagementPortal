@@ -51,7 +51,8 @@ public class BasicAuthSecurityConfig {
                     "/favicon.ico",
                     "/**/*.js",
                     "/**/*.css",
-                    "/assets/**"
+                    "/assets/**",
+                    "/**"
                 ).permitAll()
 
                 .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()

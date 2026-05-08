@@ -1,6 +1,6 @@
 cd WealthManagementFrontEnd
 npm cache clean --force
-ng build --configuration production --delete-output-path=true 
+ng build --configuration production --delete-output-path=true --base-href "/"
 cd ..
 Remove-Item -Path ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
 Copy-Item -Path ".\WealthManagementFrontEnd\dist\WealthManagementFrontEnd\browser\*" -Destination ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
