@@ -31,17 +31,17 @@ spec:
           value: "apmp-cosmos"
         - name: SPRING_PROFILES_ACTIVE
           value: "test"
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: google-oauth-secret
-              key: client-id
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: google-oauth-secret
-              key: client-secret
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE
-          value: "profile,email"
-        - name: SPRING_AUTOCONFIGURE_EXCLUDE
-          value: ""
+        # - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: google-oauth-secret
+        #       key: client-id
+        # - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: google-oauth-secret
+        #       key: client-secret
+        # - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE
+        #   value: "profile,email"
+        # - name: SPRING_AUTOCONFIGURE_EXCLUDE
+        #   value: ""
