@@ -43,7 +43,7 @@ export class Register {
     this.auth.register(this.form.value).subscribe({
       next: () => {
         console.log('Registered successfully');
-        this.router.navigate(['/login']); // ✅ redirect after register
+        this.router.navigate(['/login']); 
       },
       error: err => console.error(err)
     });

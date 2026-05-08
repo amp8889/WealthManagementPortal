@@ -29,7 +29,7 @@ public class BasicAuthSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            // no redirects, Angular handles auth
+            
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(unauthorizedEntryPoint())
             )
@@ -44,7 +44,7 @@ public class BasicAuthSecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // public endpoints
+                
                 .requestMatchers(
                     "/",
                     "/index.html",
@@ -56,28 +56,28 @@ public class BasicAuthSecurityConfig {
 
                 .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
 
-                // 🔥 AUTH CHECK ENDPOINT
+                
                 .requestMatchers(HttpMethod.GET, "/api/user/me")
                     .hasAnyRole("ADMIN", "ADVISOR", "CLIENT")
 
-                // 🔥 RBAC RULES
+                
 
-                // ADMIN only (full system access)
+                
                 .requestMatchers("/api/admin/**")
                     .hasRole("ADMIN")
 
-                // ADVISOR + ADMIN (client data access)
+                
                 .requestMatchers("/api/clientrecords/**")
                     .hasAnyRole("ADMIN", "ADVISOR", "CLIENT")
 
                 .requestMatchers("/api/goal/**")
                     .hasAnyRole("ADMIN", "ADVISOR", "CLIENT")
 
-                // CLIENT dashboard only
+                
                 .requestMatchers("/api/dashboard/**")
                     .hasAnyRole("CLIENT", "ADMIN", "ADVISOR")
 
-                // fallback
+                
                 .requestMatchers("/api/**")
                     .authenticated()
 

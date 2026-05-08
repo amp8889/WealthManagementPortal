@@ -13,9 +13,7 @@ private meUrl = `${environment.apiUrl}/api/user/me`;
 
   constructor(private http: HttpClient) {}
 
-  // -------------------------
-  // LOGIN
-  // -------------------------
+
 login(email: string, password: string): Observable<any> {
   const headers = new HttpHeaders({
     Authorization: 'Basic ' + btoa(`${email}:${password}`)
@@ -30,16 +28,12 @@ login(email: string, password: string): Observable<any> {
 })
   );
 }
-  // -------------------------
-  // REGISTER
-  // -------------------------
+
   register(user: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/register`, user);
   }
 
-  // -------------------------
-  // USER STATE
-  // -------------------------
+
   setUser(user: any) {
     this.userSubject.next(user);
   }

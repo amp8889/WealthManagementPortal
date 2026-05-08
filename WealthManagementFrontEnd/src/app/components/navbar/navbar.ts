@@ -21,7 +21,7 @@ export class Navbar {
     private auth: AuthService,
     private router: Router
   ) {
-    // ✅ safe initialization (after DI is ready)
+    
     this.user$ = this.auth.user$;
 
 this.auth.user$.subscribe(user => {
