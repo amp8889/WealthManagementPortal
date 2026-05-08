@@ -90,6 +90,18 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+</dependency>
+
+<!-- OAuth2 Client (needed for the Jwt class itself + OIDC support) -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+
+
 	</dependencies>
 	<!--<dependencyManagement>
 		<dependencies>
