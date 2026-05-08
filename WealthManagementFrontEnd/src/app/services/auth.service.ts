@@ -25,7 +25,9 @@ login(email: string, password: string): Observable<any> {
     headers,
     withCredentials: true
   }).pipe(
-    tap(user => this.userSubject.next(user))
+    tap(user => {
+  this.userSubject.next({ ...user, email, password });
+})
   );
 }
   // -------------------------

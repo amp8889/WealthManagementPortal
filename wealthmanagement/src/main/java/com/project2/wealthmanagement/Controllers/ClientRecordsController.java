@@ -43,6 +43,7 @@ public class ClientRecordsController {
     @PostMapping
     public ResponseEntity<ClientRecords> createClientRecords(@RequestBody ClientRecords clientRecords) {
         return ResponseEntity.ok(service.createClientRecords(clientRecords));
+        
     }
 
     @PutMapping("/{id}")

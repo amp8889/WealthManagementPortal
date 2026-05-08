@@ -68,13 +68,13 @@ public class BasicAuthSecurityConfig {
 
                 // ADVISOR + ADMIN (client data access)
                 .requestMatchers("/api/clientrecords/**")
-                    .hasAnyRole("ADMIN", "ADVISOR")
+                    .hasAnyRole("ADMIN", "ADVISOR", "CLIENT")
 
                 .requestMatchers("/api/goal/**")
-                    .hasAnyRole("ADMIN", "ADVISOR")
+                    .hasAnyRole("ADMIN", "ADVISOR", "CLIENT")
 
                 // CLIENT dashboard only
-                .requestMatchers("/api/client-dashboard/**")
+                .requestMatchers("/api/dashboard/**")
                     .hasAnyRole("CLIENT", "ADMIN", "ADVISOR")
 
                 // fallback
