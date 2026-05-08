@@ -1,32 +1,16 @@
 <p-card header="Login" styleClass="w-full md:w-25rem mx-auto mt-6 shadow-3">
-  <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-column gap-3">
 
-    <input
-      pInputText
-      type="email"
-      formControlName="email"
-      placeholder="Email"
-      class="w-full"
-    />
-
-    <p-password
-      formControlName="password"
-      placeholder="Password"
-      styleClass="w-full"
-      inputStyleClass="w-full"
-      [feedback]="false"
-    ></p-password>
+  <div class="flex flex-column gap-3">
 
     <button
       pButton
-      type="submit"
-      label="Login"
+      type="button"
+      label="Login with Microsoft"
+      icon="pi pi-microsoft"
       class="w-full"
+      (click)="loginWithMicrosoft()"
     ></button>
 
-    <small class="text-red-500" *ngIf="error">
-      {{ error }}
-    </small>
+  </div>
 
-  </form>
 </p-card>

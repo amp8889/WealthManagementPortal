@@ -1,38 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { environment } from '../environments/environment';
+import { BehaviorSubject } from 'rxjs';
+import { MsalService } from '@azure/msal-angular';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-private baseUrl = `${environment.apiUrl}/api/user`;
-private meUrl = `${environment.apiUrl}/api/user/me`;
 
-  private userSubject = new BehaviorSubject<any>(this.loadUser());
+  private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private msalService: MsalService) {}
 
-
-login(email: string, password: string): Observable<any> {
-  const headers = new HttpHeaders({
-    Authorization: 'Basic ' + btoa(`${email}:${password}`)
-  });
-
-  return this.http.get(this.meUrl, {
-    headers,
-    withCredentials: true
-  }).pipe(
-    tap(user => {
-  this.userSubject.next({ ...user, email, password });
-})
-  );
-}
-
-  register(user: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, user);
+  login() {
+    this.msalService.loginRedirect();
   }
 
+  logout() {
+    this.msalService.logoutRedirect();
+    this.userSubject.next(null);
+  }
 
   setUser(user: any) {
     this.userSubject.next(user);
@@ -43,14 +28,6 @@ login(email: string, password: string): Observable<any> {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getUser();
-  }
-
-  logout() {
-    this.userSubject.next(null);
-  }
-
-  private loadUser() {
-    return null;
+    return this.msalService.instance.getAllAccounts().length > 0;
   }
 }
