@@ -32,6 +32,7 @@ this.auth.user$.subscribe(user => {
 this.items$ = this.auth.user$.pipe(
   map(user => {
     const role = user?.role;
+    const relatedId = user?.relatedId
 
     const items = [
       { label: 'Home', icon: 'pi pi-home', routerLink: '/' }
@@ -45,8 +46,9 @@ this.items$ = this.auth.user$.pipe(
       items.push({ label: 'Goals', icon: 'pi pi-chart-line', routerLink: '/goal' });
     }
 
-    if (role === 'CLIENT') {
-      items.push({ label: 'My Dashboard', icon: 'pi pi-user', routerLink: '/client-dashboard' });
+    if (role === 'CLIENT' && relatedId) {
+      items.push({ label: 'My Dashboard', icon: 'pi pi-user',         routerLink: `/dashboard/${relatedId}`
+ });
     }
 
     return items;

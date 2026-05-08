@@ -56,7 +56,10 @@ private final UserRepository repository;
 
 
 public User getByEmail(String email) {
-    return repository.findByEmail(email)
+    return repository.findAll()
+        .stream()
+        .filter(u -> email.equals(u.getEmail()))
+        .findFirst()
         .orElse(null);
 }
 
