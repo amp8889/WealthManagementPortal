@@ -18,6 +18,6 @@ kubectl apply -f .\azure\deployment.yaml
 kubectl apply -f .\azure\service.yaml
 kubectl apply -f .\azure\ingress.yaml
 
-kubectl annotate svc -n app-routing-system nginx service.beta.kubernetes.io/azure-dns-label-name="wealthmanagementportal"
+kubectl annotate svc -n app-routing-system nginx service.beta.kubernetes.io/azure-dns-label-name="wealthmanagementportal" --overwrite
 
 kubectl rollout restart deployment/wealthmanagement
