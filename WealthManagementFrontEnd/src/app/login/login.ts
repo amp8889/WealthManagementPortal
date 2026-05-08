@@ -7,6 +7,7 @@ import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { Router } from '@angular/router';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,7 @@ export class Login {
 
   submit() {
     if (this.form.invalid) return;
-
+console.log(environment);
     const { email, password } = this.form.value;
 
     this.auth.login(email, password).subscribe({
