@@ -1,14 +1,18 @@
 # spring:
+#   security:
+#     oauth2:
+#       resourceserver:
+#         jwt:
+#           issuer-uri: https://login.microsoftonline.com/f947665a-e85c-43ab-8198-2b8c8cbeb643/v2.0
 #   application:
 #     name: wealthmanagement
 #   profiles:
 #     active: dev
-#  # autoconfigure:
-#  #   exclude:
-#  #     - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-#  #     - org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration
-#  #     - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
-
+#   # autoconfigure:
+#   #   exclude:
+#   #     - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+#   #     - org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration
+#   #     - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
 #   data:
 #     mongodb:
 #       database: apmp-cosmos

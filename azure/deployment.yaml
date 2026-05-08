@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: wealthmanagement
-        image: apmpacr.azurecr.io/wealthmanagement:v9
+        image: apmpacr.azurecr.io/wealthmanagement:v11
         ports:
         - containerPort: 8080
         env:
@@ -31,6 +31,8 @@ spec:
           value: "apmp-cosmos"
         - name: SPRING_PROFILES_ACTIVE
           value: "test"
+        - name: SPRING_AUTOCONFIGURE_EXCLUDE
+          value: ""
         # - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID
         #   valueFrom:
         #     secretKeyRef:
@@ -43,5 +45,3 @@ spec:
         #       key: client-secret
         # - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE
         #   value: "profile,email"
-        # - name: SPRING_AUTOCONFIGURE_EXCLUDE
-        #   value: ""
