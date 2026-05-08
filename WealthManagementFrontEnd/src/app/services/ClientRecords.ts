@@ -1,35 +1,30 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ClientRecord } from '../types/ClientRecord';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ClientRecordsService {
 
-  private baseUrl = `${environment.apiUrl}/api/clientrecords`;
-
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   getAll(): Observable<ClientRecord[]> {
-    return this.http.get<ClientRecord[]>(this.baseUrl);
+    return this.api.get<ClientRecord[]>('/api/clientrecords');
   }
 
   getById(id: string): Observable<ClientRecord> {
-    return this.http.get<ClientRecord>(`${this.baseUrl}/${id}`);
+    return this.api.get<ClientRecord>(`/api/clientrecords/${id}`);
   }
 
   create(client: ClientRecord): Observable<ClientRecord> {
-    return this.http.post<ClientRecord>(this.baseUrl, client);
+    return this.api.post<ClientRecord>('/api/clientrecords', client);
   }
 
   update(id: string, client: ClientRecord): Observable<ClientRecord> {
-    return this.http.put<ClientRecord>(`${this.baseUrl}/${id}`, client);
+    return this.api.put<ClientRecord>(`/api/clientrecords/${id}`, client);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.api.delete<void>(`/api/clientrecords/${id}`);
   }
 }
