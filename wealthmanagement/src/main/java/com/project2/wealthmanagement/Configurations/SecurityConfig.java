@@ -77,8 +77,13 @@ public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() 
     return (org.springframework.security.oauth2.jwt.Jwt jwt) -> {  // ← fully qualified
         Collection<String> roles = new ArrayList<>();
 
-        if (jwt.getClaims().containsKey("roles")) {  // ← use getClaims().containsKey() instead
+        // Check for Azure AD roles claim (if app roles are configured in Azure AD)
+        if (jwt.getClaims().containsKey("roles")) {
             roles.addAll(jwt.getClaimAsStringList("roles"));
+        } else {
+            // If no roles claim, grant default USER role (requires proper Azure AD app role setup)
+            // This allows tokens to proceed for role-based filtering in controllers
+            roles.add("CLIENT");
         }
 
         var authorities = roles.stream()

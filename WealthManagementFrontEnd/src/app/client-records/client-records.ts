@@ -5,7 +5,6 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { table } from 'console';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClientTier } from '../types/ClientTier';
 import { RiskTolerance } from '../types/RiskTolerance';
@@ -16,146 +15,91 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { GoalService } from '../services/GoalService';
 import { Router } from '@angular/router';
-
-
+import { MsalBroadcastService } from '@azure/msal-angular';
+import { InteractionStatus } from '@azure/msal-browser';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-records',
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal, DatePickerModule, CommonModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule,
+    ReactiveFormsModule, FormsModule, Select, DeleteConfirmationModal,
+    DatePickerModule, CommonModule],
   templateUrl: './client-records.html',
   styleUrl: './client-records.css',
 })
 export class ClientRecords implements OnInit {
 
-
-
-
   clients = signal<ClientRecord[]>([]);
   selectedClient = signal<ClientRecord | null>(null);
   goals = signal<any[]>([]);
-
   showFormDialog = signal<boolean>(false);
   showDeleteDialog = signal<boolean>(false);
 
+  constructor(
+    private clientService: ClientRecordsService,
+    private formBuilder: FormBuilder,
+    private goalService: GoalService,
+    private router: Router,
+    private msalBroadcastService: MsalBroadcastService
+  ) {}
 
-  constructor(private clientService: ClientRecordsService, private formBuilder: FormBuilder, private goalService: GoalService, private router: Router) {
-
-
-  }
-
-
-  clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({
-    label: value,
-    value: key
-  }));
-
-  riskToleranceOptions = Object.entries(RiskTolerance).map(([key, value]) => ({
-    label: value,
-    value: key
-  }));
-  primaryObjectiveOptions = Object.entries(PrimaryObjective).map(([key, value]) => ({
-    label: value,
-    value: key
-  }));
+  clientTierOptions = Object.entries(ClientTier).map(([key, value]) => ({ label: value, value: key }));
+  riskToleranceOptions = Object.entries(RiskTolerance).map(([key, value]) => ({ label: value, value: key }));
+  primaryObjectiveOptions = Object.entries(PrimaryObjective).map(([key, value]) => ({ label: value, value: key }));
 
   form!: FormGroup;
 
   ngOnInit(): void {
-    this.loadClients();
-    this.loadGoals();
+    this.msalBroadcastService.inProgress$
+      .pipe(
+        filter((status: InteractionStatus) => status === InteractionStatus.None),
+        take(1)
+      )
+      .subscribe(() => {
+        this.loadClients();
+        this.loadGoals();
+      });
 
     this.form = this.formBuilder.group({
-      firstName: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(50),
-        ],
-      ],
-      lastName: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(50),
-        ],
-      ],
-      clientTier: ["", [Validators.required]],
-      country: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-        ],
-      ], riskTolerance: ["", [Validators.required]],
-      primaryObjective: ["", [Validators.required]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      clientTier: ['', [Validators.required]],
+      country: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      riskTolerance: ['', [Validators.required]],
+      primaryObjective: ['', [Validators.required]],
     });
-
-
   }
 
-
-viewClientDashboard(clientId: string) {
-  this.router.navigate(['/dashboard', clientId]);
-}
-
-
+  viewClientDashboard(clientId: string) {
+    this.router.navigate(['/dashboard', clientId]);
+  }
 
   loadClients() {
     this.clientService.getAll().subscribe({
-      next: (data) => {
-        this.clients.set(data);
-      },
-
-      error: (err) => {
-        console.error(err)
-      }
-
+      next: (data) => this.clients.set(data),
+      error: (err) => console.error(err)
     });
   }
 
-loadGoals() {
-  this.goalService.getAll().subscribe({
-    next: (data) => {
-      this.goals.set(data);
-    },
-    error: (err) => console.error(err)
-  });
-}
+  loadGoals() {
+    this.goalService.getAll().subscribe({
+      next: (data) => this.goals.set(data),
+      error: (err) => console.error(err)
+    });
+  }
 
-
-getGoalCount(clientId: string): number {
-  return this.goals().filter(goal =>
-    goal.clientId === clientId ||
-    (Array.isArray(goal.clientId) && goal.clientId.includes(clientId))
-  ).length;
-}
-
-
-
+  getGoalCount(clientId: string): number {
+    return this.goals().filter(goal =>
+      goal.clientId === clientId ||
+      (Array.isArray(goal.clientId) && goal.clientId.includes(clientId))
+    ).length;
+  }
 
   saveClient() {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
 
-    const { id, firstName, lastName, clientTier, country, riskTolerance, primaryObjective } = this.form.value;
-    // const clientTierKey = Object.entries(ClientTier).find(([, val]) => val === clientTier)?.[0];
-    // const riskToleranceKey = Object.entries(RiskTolerance).find(([, val]) => val === riskTolerance)?.[0];
-    // const primaryObjectiveKey = Object.entries(PrimaryObjective).find(([, val]) => val === primaryObjective)?.[0];
-
-    const payload: ClientRecord = {
-      // clientRecordsId: "1",
-      firstName,
-      lastName,
-      clientTier,
-      country,
-      riskTolerance,
-      primaryObjective
-
-    }
+    const { firstName, lastName, clientTier, country, riskTolerance, primaryObjective } = this.form.value;
+    const payload: ClientRecord = { firstName, lastName, clientTier, country, riskTolerance, primaryObjective };
 
     if (this.selectedClient() === null) {
       this.clientService.create(payload).subscribe({
@@ -163,33 +107,23 @@ getGoalCount(clientId: string): number {
           this.clients.update((currentList) => [...currentList, data]);
           this.showFormDialog.set(false);
         },
-        error: (err) => {
-          console.error(err);
-          this.showFormDialog.set(false);
-        }
-      })
-    }
-    else {
+        error: (err) => { console.error(err); this.showFormDialog.set(false); }
+      });
+    } else {
       payload.id = this.selectedClient()!.id;
       this.clientService.update(payload!.id!, payload).subscribe({
         next: (data) => {
-          this.clients.update((currentList) => currentList.map(clientRecord => clientRecord.id === data.id ? data : clientRecord));
+          this.clients.update((currentList) =>
+            currentList.map(c => c.id === data.id ? data : c)
+          );
           this.showFormDialog.set(false);
         },
-        error: (err) => {
-          console.error(err)
-          this.showFormDialog.set
-        }
-      })
+        error: (err) => { console.error(err); this.showFormDialog.set(false); }
+      });
     }
   }
 
-
   handleUpdateClientRecord(clientRecord: ClientRecord) {
-
-    console.log("SELECTED Client Record:");
-    console.log(clientRecord);
-
     this.selectedClient.set(clientRecord);
     this.form.setValue({
       firstName: clientRecord.firstName,
@@ -198,48 +132,29 @@ getGoalCount(clientId: string): number {
       country: clientRecord.country,
       riskTolerance: clientRecord.riskTolerance,
       primaryObjective: clientRecord.primaryObjective
-    })
-
-
-
+    });
     this.showFormDialog.set(true);
   }
-
-
 
   handleDeleteClientRecord(clientRecord: ClientRecord) {
     this.selectedClient.set(clientRecord);
     this.showDeleteDialog.set(true);
   }
 
-
-
   deleteClient() {
-
     if (this.selectedClient() === null || this.selectedClient()!.id === null) {
-      console.log("NO ID")
-      return
+      console.log('NO ID');
+      return;
     }
 
     this.clientService.delete(this.selectedClient()!.id!).subscribe({
       next: () => {
-        this.clients.update((currentList) => currentList.filter(clientRecords => clientRecords.id !== this.selectedClient()!.id));
-        this, this.showDeleteDialog.set(false);
-      },
-      error: (err) => {
-        console.log(err)
+        this.clients.update((currentList) =>
+          currentList.filter(c => c.id !== this.selectedClient()!.id)
+        );
         this.showDeleteDialog.set(false);
-      }
-
-
-    })
-
-
-
+      },
+      error: (err) => { console.log(err); this.showDeleteDialog.set(false); }
+    });
   }
-
-
-
 }
-
-

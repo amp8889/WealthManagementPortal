@@ -1,35 +1,30 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Goal } from '../types/Goal';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class GoalService {
 
-  private baseUrl = `${environment.apiUrl}/api/goal`;
-
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   getAll(): Observable<Goal[]> {
-    return this.http.get<Goal[]>(this.baseUrl);
+    return this.api.get<Goal[]>('/api/goal');
   }
 
   getById(id: string): Observable<Goal> {
-    return this.http.get<Goal>(`${this.baseUrl}/${id}`);
+    return this.api.get<Goal>(`/api/goal/${id}`);
   }
 
-  create(client: Goal): Observable<Goal> {
-    return this.http.post<Goal>(this.baseUrl, client);
+  create(goal: Goal): Observable<Goal> {
+    return this.api.post<Goal>('/api/goal', goal);
   }
 
-  update(id: string, client: Goal): Observable<Goal> {
-    return this.http.put<Goal>(`${this.baseUrl}/${id}`, client);
+  update(id: string, goal: Goal): Observable<Goal> {
+    return this.api.put<Goal>(`/api/goal/${id}`, goal);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.api.delete<void>(`/api/goal/${id}`);
   }
 }

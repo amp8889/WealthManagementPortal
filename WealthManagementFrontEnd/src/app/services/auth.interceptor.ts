@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { MsalService } from '@azure/msal-angular';
-import { from } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private msalService: MsalService) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const account = this.msalService.instance.getAllAccounts()[0];
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const account = this.msalService.instance.getActiveAccount()
+      ?? this.msalService.instance.getAllAccounts()[0];
 
     if (!account) {
+      console.warn('No active account found, request will proceed without auth header');
       return next.handle(req);
     }
 
@@ -23,12 +25,17 @@ export class AuthInterceptor implements HttpInterceptor {
       })
     ).pipe(
       switchMap(result => {
+        console.log('Token acquired, adding to request:', req.url);
         const cloned = req.clone({
           setHeaders: {
             Authorization: `Bearer ${result.accessToken}`
           }
         });
         return next.handle(cloned);
+      }),
+      catchError(error => {
+        console.error('Error acquiring token:', error);
+        return next.handle(req);
       })
     );
   }
