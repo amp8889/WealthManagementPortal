@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MsalService } from '@azure/msal-angular';
 
+const BACKEND_CLIENT_ID = '79658250-737d-4b88-b080-a7c8bf2a1d5e';
+
+
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
@@ -11,7 +15,14 @@ export class AuthService {
   constructor(private msalService: MsalService) {}
 
   login() {
-    this.msalService.loginRedirect();
+    this.msalService.loginRedirect({
+      scopes: [
+        'openid',
+        'profile',
+        'email',
+        `api://${BACKEND_CLIENT_ID}/access_as_user`  // ← backend scope added
+      ]
+    });
   }
 
   logout() {
