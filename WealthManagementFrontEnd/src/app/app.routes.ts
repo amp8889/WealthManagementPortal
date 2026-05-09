@@ -11,7 +11,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'auth', component: MsalRedirectComponent },
 
-  // Both roles can access
+  
   { path: 'home', component: Home, canActivate: [MsalGuard] },
   {
     path: 'dashboard/:clientId',
@@ -19,7 +19,7 @@ export const routes: Routes = [
     canActivate: [MsalGuard]
   },
 
-  // Admin only
+  
   { path: 'clientrecords', component: ClientRecords, canActivate: [MsalGuard, adminGuard] },
   { path: 'clientrecords/:id', component: ClientDashboard, canActivate: [MsalGuard, adminGuard] },
   { path: 'goal', component: Goal, canActivate: [MsalGuard, adminGuard] },
