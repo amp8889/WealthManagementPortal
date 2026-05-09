@@ -7,6 +7,7 @@ import { MsalService, MsalBroadcastService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -22,34 +23,36 @@ export class App implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private msalService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
+    private msalBroadcastService: MsalBroadcastService,
+    private authService: AuthService  // ← add this
+
   ) {}
 
-  ngOnInit(): void {
-    // Processes the #code= in the URL after Azure redirects back
-    this.msalService.handleRedirectObservable().subscribe({
-      next: (result) => {
-        if (result) {
-          this.msalService.instance.setActiveAccount(result.account);
-          this.router.navigate(['/home']);  // ← redirect to home after successful login
-        }
-      },
-      error: (error) => console.error('Redirect error:', error)
-    });
+ngOnInit(): void {
+  this.msalService.handleRedirectObservable().subscribe({
+    next: (result) => {
+      if (result) {
+        this.msalService.instance.setActiveAccount(result.account);
+        this.authService.loadUserFromToken();  // ← populate role
+        this.router.navigate(['/home']);
+      }
+    },
+    error: (error) => console.error('Redirect error:', error)
+  });
 
-    // Set active account once MSAL is done with any in-progress interaction
-    this.msalBroadcastService.inProgress$
-      .pipe(
-        filter((status: InteractionStatus) => status === InteractionStatus.None),
-        takeUntil(this.destroying$)
-      )
-      .subscribe(() => {
-        const accounts = this.msalService.instance.getAllAccounts();
-        if (accounts.length > 0) {
-          this.msalService.instance.setActiveAccount(accounts[0]);
-        }
-      });
-  }
+  this.msalBroadcastService.inProgress$
+    .pipe(
+      filter((status: InteractionStatus) => status === InteractionStatus.None),
+      takeUntil(this.destroying$)
+    )
+    .subscribe(() => {
+      const accounts = this.msalService.instance.getAllAccounts();
+      if (accounts.length > 0) {
+        this.msalService.instance.setActiveAccount(accounts[0]);
+        this.authService.loadUserFromToken();  // ← also load on page refresh
+      }
+    });
+}
 
   ngOnDestroy(): void {
     this.destroying$.next(undefined);

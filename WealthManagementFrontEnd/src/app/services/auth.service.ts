@@ -4,8 +4,6 @@ import { MsalService } from '@azure/msal-angular';
 
 const BACKEND_CLIENT_ID = '79658250-737d-4b88-b080-a7c8bf2a1d5e';
 
-
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
@@ -17,10 +15,8 @@ export class AuthService {
   login() {
     this.msalService.loginRedirect({
       scopes: [
-        'openid',
-        'profile',
-        'email',
-        `api://${BACKEND_CLIENT_ID}/access_as_user`  // ← backend scope added
+        'openid', 'profile', 'email',
+        `api://${BACKEND_CLIENT_ID}/access_as_user`
       ]
     });
   }
@@ -30,22 +26,39 @@ export class AuthService {
     this.userSubject.next(null);
   }
 
-  setUser(user: any) {
-    this.userSubject.next(user);
+  // ← Call this after login to populate user$ with role info from the token
+  loadUserFromToken() {
+    const account = this.msalService.instance.getActiveAccount()
+      ?? this.msalService.instance.getAllAccounts()[0];
+
+    if (!account) return;
+
+    this.msalService.instance.acquireTokenSilent({
+      scopes: [`api://${BACKEND_CLIENT_ID}/access_as_user`],
+      account
+    }).then(result => {
+      // Decode the JWT payload (middle section)
+      const payload = JSON.parse(atob(result.accessToken.split('.')[1]));
+      const roles: string[] = payload.roles ?? [];
+      const role = roles[0] ?? null;  // take first role
+
+      this.userSubject.next({
+        name: account.name,
+        username: account.username,
+        role: role,  // 'ADMIN' or 'CLIENT'
+      });
+    }).catch(err => console.error('Failed to load user from token:', err));
   }
 
   getUser() {
     return this.userSubject.value;
   }
 
-  getAccessToken(): Promise<string | null> {
-    const account = this.msalService.instance.getAllAccounts()[0];
-    if (!account) {
-      return Promise.resolve(null);
-    }
-    return this.msalService.instance.acquireTokenSilent({
-      scopes: ['api://79658250-737d-4b88-b080-a7c8bf2a1d5e/access_as_user'],
-      account
-    }).then(result => result.accessToken).catch(() => null);
+  isAuthenticated(): boolean {
+    return this.msalService.instance.getAllAccounts().length > 0;
+  }
+
+  getRole(): string | null {
+    return this.userSubject.value?.role ?? null;
   }
 }

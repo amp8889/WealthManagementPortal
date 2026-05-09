@@ -5,23 +5,24 @@ import { Home } from './home/home';
 import { ClientDashboard } from './client-dashboard/client-dashboard';
 import { Login } from './login/login';
 import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
+import { adminGuard } from './guards/role.guard';
 
 export const routes: Routes = [
-  // Public routes — no guard
   { path: 'login', component: Login },
   { path: 'auth', component: MsalRedirectComponent },
 
-  // Protected routes — require login
+  // Both roles can access
   { path: 'home', component: Home, canActivate: [MsalGuard] },
-  { path: 'clientrecords', component: ClientRecords, canActivate: [MsalGuard] },
-  { path: 'clientrecords/:id', component: ClientDashboard, canActivate: [MsalGuard] },
-  { path: 'goal', component: Goal, canActivate: [MsalGuard] },
   {
     path: 'dashboard/:clientId',
     loadComponent: () => import('./client-dashboard/client-dashboard').then(m => m.ClientDashboard),
     canActivate: [MsalGuard]
   },
 
-  // Default
+  // Admin only
+  { path: 'clientrecords', component: ClientRecords, canActivate: [MsalGuard, adminGuard] },
+  { path: 'clientrecords/:id', component: ClientDashboard, canActivate: [MsalGuard, adminGuard] },
+  { path: 'goal', component: Goal, canActivate: [MsalGuard, adminGuard] },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
