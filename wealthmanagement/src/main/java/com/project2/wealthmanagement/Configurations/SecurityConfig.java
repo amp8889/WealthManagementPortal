@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/index.html", "/favicon.ico",
-                                "/**/*.js", "/**/*.css", "/assets/**", "auth", "/auth/**")
+                                "/**/*.js", "/**/*.css", "/assets/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/user/me")
