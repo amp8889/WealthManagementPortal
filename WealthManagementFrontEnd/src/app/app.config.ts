@@ -24,12 +24,14 @@ const FRONTEND_CLIENT_ID = '1ae58dcb-e998-4c0f-9761-e186cacf4c35';
 const BACKEND_CLIENT_ID = '79658250-737d-4b88-b080-a7c8bf2a1d5e';
 
 export function MSALInstanceFactory(): PublicClientApplication {
+  const origin = window.location.origin;
+  
   return new PublicClientApplication({
     auth: {
       clientId: FRONTEND_CLIENT_ID,
       authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-      redirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com/auth',
-      postLogoutRedirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com/login'
+      redirectUri: `${origin}/auth`,
+      postLogoutRedirectUri: `${origin}/login`
     },
     cache: {
       cacheLocation: 'localStorage'
