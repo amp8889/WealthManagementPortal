@@ -4,20 +4,13 @@ metadata:
   name: wealthmanagement-ingress
   namespace: default
   annotations:
-    kubernetes.azure.com/tls-cert-keyvault-uri: https://apmp-kv.vault.azure.net/certificates/wealthmanagement-cert
+    kubernetes.azure.com/cluster-autoscaler-default-tls: "true"  # ← auto TLS
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
   rules:
   - host: wealthmanagementportal.eastus.cloudapp.azure.com
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: wealthmanagement-frontend-service
-            port:
-              number: 80
       - path: /api
         pathType: Prefix
         backend:
@@ -25,7 +18,14 @@ spec:
             name: wealthmanagement-service
             port:
               number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wealthmanagement-frontend-service
+            port:
+              number: 80
   tls:
   - hosts:
     - wealthmanagementportal.eastus.cloudapp.azure.com
-    secretName: keyvault-wealthmanagement-ingress
+    secretName: wealthmanagement-tls
