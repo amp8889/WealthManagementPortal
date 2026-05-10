@@ -28,7 +28,7 @@ export function MSALInstanceFactory(): PublicClientApplication {
     auth: {
       clientId: FRONTEND_CLIENT_ID,
       authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-      redirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com',
+      redirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com/auth',
       postLogoutRedirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com/api/login'
     },
     cache: {
