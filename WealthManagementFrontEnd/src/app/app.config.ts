@@ -15,7 +15,7 @@ import {
   MsalGuardConfiguration
 } from '@azure/msal-angular';
 
-import { AuthInterceptor } from './services/auth.interceptor';
+// import { AuthInterceptor } from './services/auth.interceptor';
 
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 
@@ -57,11 +57,11 @@ export const appConfig: ApplicationConfig = {
 
     provideHttpClient(withInterceptorsFromDi()),
 
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor,
+    //   multi: true
+    // },
 
     {
       provide: MSAL_INSTANCE,
