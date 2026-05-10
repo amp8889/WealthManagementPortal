@@ -5,17 +5,17 @@
 # Remove-Item -Path ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
 # Copy-Item -Path ".\WealthManagementFrontEnd\dist\WealthManagementFrontEnd\browser\*" -Destination ".\wealthmanagement\src\main\resources\static\" -Recurse -Force
 
-docker build --no-cache -t wealthmanagement:v23 .
-docker tag wealthmanagement:v23 apmpacr.azurecr.io/wealthmanagement:v23
+docker build --no-cache -t wealthmanagement:v26 .
+docker tag wealthmanagement:v26 apmpacr.azurecr.io/wealthmanagement:v26
 
 cd WealthManagementFrontEnd
-docker build --no-cache -t wealthmanagement-frontend:v23 .
+docker build --no-cache -t wealthmanagement-frontend:v26 .
 cd ..
-docker tag wealthmanagement-frontend:v23 apmpacr.azurecr.io/wealthmanagement-frontend:v23
+docker tag wealthmanagement-frontend:v26 apmpacr.azurecr.io/wealthmanagement-frontend:v26
 
 az acr login --name apmpacr
-docker push apmpacr.azurecr.io/wealthmanagement:v23
-docker push apmpacr.azurecr.io/wealthmanagement-frontend:v23
+docker push apmpacr.azurecr.io/wealthmanagement:v26
+docker push apmpacr.azurecr.io/wealthmanagement-frontend:v26
 
 az aks get-credentials --resource-group 20260316-EY-Java --name apmp-aks --overwrite-existing
 

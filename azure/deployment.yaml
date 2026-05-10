@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: wealthmanagement
-        image: apmpacr.azurecr.io/wealthmanagement:v23
+        image: apmpacr.azurecr.io/wealthmanagement:v26
         ports:
         - containerPort: 8080
         env:
