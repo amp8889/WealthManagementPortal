@@ -19,7 +19,7 @@ import com.project2.wealthmanagement.Services.ClientRecordsService;
 
 import jakarta.validation.Valid;
 
-// @CrossOrigin(origins = {"http://127.0.0.1:3000" , "http://localhost:8080", "http://127.0.0.1:5500", "http://localhost:4200", "http://wealthmanagementportal.eastus.cloudapp.azure.com"})      // don't want @CrossOriging("*") - this allows everything
+// @CrossOrigin(origins = {"http://127.0.0.1:3000" , "http://localhost:8080", "http://127.0.0.1:5500", "http://localhost:4200", "https://wealthmanagementportal.eastus.cloudapp.azure.com"})      // don't want @CrossOriging("*") - this allows everything
 @RestController
 @RequestMapping("/api/clientrecords")
 public class ClientRecordsController {

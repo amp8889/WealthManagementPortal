@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-// @CrossOrigin(origins = { "http://127.0.0.1:3000", "http://localhost:8080", "http://127.0.0.1:5500", "http://wealthmanagementportal.eastus.cloudapp.azure.com",
+// @CrossOrigin(origins = { "http://127.0.0.1:3000", "http://localhost:8080", "http://127.0.0.1:5500", "https://wealthmanagementportal.eastus.cloudapp.azure.com",
 //         "http://localhost:4200" })
 @RestController
 @RequestMapping("/api/user")

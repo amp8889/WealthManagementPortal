@@ -21,7 +21,7 @@ import com.project2.wealthmanagement.Services.GoalService;
 
 import jakarta.validation.Valid;
 
-// @CrossOrigin(origins = {"http://127.0.0.1:3000" , "http://localhost:8080", "http://127.0.0.1:5500", "http://localhost:4200", "http://wealthmanagementportal.eastus.cloudapp.azure.com"})      
+// @CrossOrigin(origins = {"http://127.0.0.1:3000" , "http://localhost:8080", "http://127.0.0.1:5500", "http://localhost:4200", "https://wealthmanagementportal.eastus.cloudapp.azure.com"})      
 @RestController
 @RequestMapping("/api/goal")
 public class GoalController {
