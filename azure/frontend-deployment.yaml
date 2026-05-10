@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wealthmanagement-frontend
+  labels:
+    app: wealthmanagement-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wealthmanagement-frontend
+  template:
+    metadata:
+      labels:
+        app: wealthmanagement-frontend
+    spec:
+      containers:
+      - name: wealthmanagement-frontend
+        image: apmpacr.azurecr.io/wealthmanagement-frontend:v21
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
