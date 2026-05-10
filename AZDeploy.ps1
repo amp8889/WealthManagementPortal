@@ -23,6 +23,7 @@ kubectl apply -f .\azure\secret.yaml
 kubectl apply -f .\azure\deployment.yaml
 kubectl apply -f .\azure\service.yaml
 kubectl apply -f .\azure\ingress.yaml
+kubectl apply -f .\azure\cluster-issuer.yaml
 
 kubectl apply -f .\azure\frontend-deployment.yaml
 kubectl apply -f .\azure\frontend-service.yaml
