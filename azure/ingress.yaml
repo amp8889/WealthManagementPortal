@@ -4,7 +4,8 @@ metadata:
   name: wealthmanagement-ingress
   namespace: default
   annotations:
-    kubernetes.azure.com/cluster-autoscaler-default-tls: "true"  # ← auto TLS
+    # kubernetes.azure.com/cluster-autoscaler-default-tls: "true"  # ← auto TLS
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
   rules:
@@ -28,4 +29,4 @@ spec:
   tls:
   - hosts:
     - wealthmanagementportal.eastus.cloudapp.azure.com
-    secretName: wealthmanagement-tls
+    secretName: wealthmanagement-tls-secret

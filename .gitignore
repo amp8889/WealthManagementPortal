@@ -4,3 +4,4 @@ wealthmanagement/src/main/resources/application.properties
 client_secrets.json
 wealthmanagement/src/main/resources/application.yaml
 wealthmanagement/src/main/resources/static
+azure/cluster-issuer.yaml
