@@ -1,7 +1,7 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from "primeng/config";
-import Nora from "@primeuix/themes/Nora";
+import Nora from "@primeuix/themes/nora";
 
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -28,8 +28,8 @@ export function MSALInstanceFactory(): PublicClientApplication {
     auth: {
       clientId: FRONTEND_CLIENT_ID,
       authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-      redirectUri: 'http://localhost:4200/auth',
-      postLogoutRedirectUri: 'http://localhost:4200/login'
+      redirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com/auth',
+      postLogoutRedirectUri: 'https://wealthmanagementportal.eastus.cloudapp.azure.com/login'
     },
     cache: {
       cacheLocation: 'localStorage'
