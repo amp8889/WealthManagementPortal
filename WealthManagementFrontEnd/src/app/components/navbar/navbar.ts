@@ -46,8 +46,8 @@ this.items$ = this.auth.user$.pipe(
       items.push({ label: 'Goals', icon: 'pi pi-chart-line', routerLink: '/goal' });
     }
 
-    if (role === 'CLIENT' && relatedId) {
-      items.push({ label: 'My Dashboard', icon: 'pi pi-user',         routerLink: `/dashboard/${relatedId}`
+    if (role === 'CLIENT') {
+      items.push({ label: 'My Dashboard', icon: 'pi pi-user',         routerLink: `/dashboard/8fa521e2-0518-42e1-8526-91c3a63284b7`
  });
     }
 

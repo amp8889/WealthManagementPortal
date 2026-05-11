@@ -17,7 +17,7 @@ export class ApiService {
     const account = this.msalService.instance.getActiveAccount()
       ?? this.msalService.instance.getAllAccounts()[0];
 
-        console.log('Account:', account);  // ← add this
+        console.log('Account:', account);  
 
     return from(
       this.msalService.instance.acquireTokenSilent({

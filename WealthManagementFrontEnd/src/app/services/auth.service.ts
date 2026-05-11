@@ -26,7 +26,6 @@ export class AuthService {
     this.userSubject.next(null);
   }
 
-  // ← Call this after login to populate user$ with role info from the token
   loadUserFromToken() {
     const account = this.msalService.instance.getActiveAccount()
       ?? this.msalService.instance.getAllAccounts()[0];
@@ -37,15 +36,15 @@ export class AuthService {
       scopes: [`api://${BACKEND_CLIENT_ID}/access_as_user`],
       account
     }).then(result => {
-      // Decode the JWT payload (middle section)
+      
       const payload = JSON.parse(atob(result.accessToken.split('.')[1]));
       const roles: string[] = payload.roles ?? [];
-      const role = roles[0] ?? null;  // take first role
+      const role = roles[0] ?? null;  
 
       this.userSubject.next({
         name: account.name,
         username: account.username,
-        role: role,  // 'ADMIN' or 'CLIENT'
+        role: role,  
       });
     }).catch(err => console.error('Failed to load user from token:', err));
   }

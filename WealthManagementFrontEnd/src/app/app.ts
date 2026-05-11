@@ -24,7 +24,7 @@ export class App implements OnInit, OnDestroy {
     private router: Router,
     private msalService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
-    private authService: AuthService  // ← add this
+    private authService: AuthService  
 
   ) {}
 
@@ -33,7 +33,7 @@ ngOnInit(): void {
     next: (result) => {
       if (result) {
         this.msalService.instance.setActiveAccount(result.account);
-        this.authService.loadUserFromToken();  // ← populate role
+        this.authService.loadUserFromToken();  
         this.router.navigate(['/home']);
       }
     },
@@ -49,7 +49,7 @@ ngOnInit(): void {
       const accounts = this.msalService.instance.getAllAccounts();
       if (accounts.length > 0) {
         this.msalService.instance.setActiveAccount(accounts[0]);
-        this.authService.loadUserFromToken();  // ← also load on page refresh
+        this.authService.loadUserFromToken();  
       }
     });
 }
